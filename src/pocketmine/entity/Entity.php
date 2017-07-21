@@ -260,6 +260,8 @@ abstract class Entity extends Location implements Metadatable {
 	public $noDamageTicks;
 	public $closed = false;
 	public $dropExp = [0, 0];
+
+	protected $baseOffset = 0.0;
 	/**
 	 * @var Player[]
 	 */
@@ -532,7 +534,7 @@ abstract class Entity extends Location implements Metadatable {
 
 		$diffMotion = ($this->motionX - $this->lastMotionX) ** 2 + ($this->motionY - $this->lastMotionY) ** 2 + ($this->motionZ - $this->lastMotionZ) ** 2;
 
-		if($diffPosition > 0.04 or $diffRotation > 2.25 and ($diffMotion > 0.0001 and $this->getMotion()->lengthSquared() <= 0.00001)){ //0.2 ** 2, 1.5 ** 2
+		if($diffPosition > 0.0001 or $diffRotation > 1.0){
 			$this->lastX = $this->x;
 			$this->lastY = $this->y;
 			$this->lastZ = $this->z;
@@ -540,7 +542,7 @@ abstract class Entity extends Location implements Metadatable {
 			$this->lastYaw = $this->yaw;
 			$this->lastPitch = $this->pitch;
 
-			$this->level->addEntityMovement($this->x >> 4, $this->z >> 4, $this->getId(), $this->x, $this->y + $this->getEyeHeight(), $this->z, $this->yaw, $this->pitch, $this->yaw);
+			$this->level->addEntityMovement($this->x >> 4, $this->z >> 4, $this->getId(), $this->x, $this->y + $this->baseOffset, $this->z, $this->yaw, $this->pitch, $this->yaw);
 		}
 
 		if($diffMotion > 0.0025 or ($diffMotion > 0.0001 and $this->getMotion()->lengthSquared() <= 0.0001)){ //0.05 ** 2
@@ -1674,6 +1676,8 @@ abstract class Entity extends Location implements Metadatable {
 			return true;
 		}
 
+		$this->blocksAround = null;
+
 		if($this->keepMovement){
 			$this->boundingBox->offset($dx, $dy, $dz);
 			$this->setPosition($this->temporalVector->setComponents(($this->boundingBox->minX + $this->boundingBox->maxX) / 2, $this->boundingBox->minY, ($this->boundingBox->minZ + $this->boundingBox->maxZ) / 2));
@@ -1802,6 +1806,7 @@ abstract class Entity extends Location implements Metadatable {
 			$this->y = $this->boundingBox->minY - $this->ySize;
 			$this->z = ($this->boundingBox->minZ + $this->boundingBox->maxZ) / 2;
 
+			$this->checkBlockCollision();
 			$this->checkChunks();
 
 			$this->checkGroundState($movX, $movY, $movZ, $dx, $dy, $dz);
@@ -1959,6 +1964,9 @@ abstract class Entity extends Location implements Metadatable {
 	}
 
 	protected function checkObstruction($x, $y, $z){
+		if(count($this->level->getCollisionCubes($this, $this->getBoundingBox(), false)) === 0){
+			return false;
+		}
 		$i = Math::floorFloat($x);
 		$j = Math::floorFloat($y);
 		$k = Math::floorFloat($z);

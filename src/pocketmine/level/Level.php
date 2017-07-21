@@ -186,8 +186,11 @@ const Y_MAX = 0x100;
 	/** @var Vector3[][] */
 	private $changedBlocks = [];
 	/** @var ReversePriorityQueue */
-	private $updateQueue;
-	private $updateQueueIndex = [];
+	private $scheduledBlockUpdateQueue;
+	private $scheduledBlockUpdateQueueIndex = [];
+
+	/** @var \SplQueue */
+	private $neighbourBlockUpdateQueue = [];
 	/** @var Player[][] */
 	private $chunkSendQueue = [];
 	private $chunkSendTasks = [];
@@ -277,8 +280,11 @@ const Y_MAX = 0x100;
 		$this->generator = Generator::getGenerator($this->provider->getGenerator());
 
 		$this->folderName = $name;
-		$this->updateQueue = new ReversePriorityQueue();
-		$this->updateQueue->setExtractFlags(\SplPriorityQueue::EXTR_BOTH);
+		$this->scheduledBlockUpdateQueue = new ReversePriorityQueue();
+		$this->scheduledBlockUpdateQueue->setExtractFlags(\SplPriorityQueue::EXTR_BOTH);
+
+		$this->neighbourBlockUpdateQueue = new \SplQueue();
+
 		$this->time = (int) $this->provider->getTime();
 
 		$this->chunkTickRadius = min($this->server->getViewDistance(), max(1, (int) $this->server->getProperty("chunk-ticking.tick-radius", 4)));
@@ -1036,11 +1042,21 @@ const Y_MAX = 0x100;
 
 		//Do block updates
 		$this->timings->doTickPending->startTiming();
-		if($this->updateQueue->count() > 0 and $this->updateQueue->current()["priority"] <= $currentTick){
-			$block = $this->getBlock($this->updateQueue->extract()["data"]);
-			unset($this->updateQueueIndex[Level::blockHash($block->x, $block->y, $block->z)]);
+		while($this->scheduledBlockUpdateQueue->count() > 0 and $this->scheduledBlockUpdateQueue->current()["priority"] <= $currentTick){
+			$block = $this->getBlock($this->scheduledBlockUpdateQueue->extract()["data"]);
+			unset($this->scheduledBlockUpdateQueueIndex[Level::blockHash($block->x, $block->y, $block->z)]);
 			$block->onUpdate(self::BLOCK_UPDATE_SCHEDULED);
 		}
+
+		while($this->neighbourBlockUpdateQueue->count() > 0){
+			$index = $this->neighbourBlockUpdateQueue->dequeue();
+			Level::getBlockXYZ($index, $x, $y, $z);
+			$this->server->getPluginManager()->callEvent($ev = new BlockUpdateEvent($this->getBlock($this->temporalVector->setComponents($x, $y, $z))));
+			if(!$ev->isCancelled()){
+				$ev->getBlock()->onUpdate(self::BLOCK_UPDATE_NORMAL);
+			}
+		}
+
 		$this->timings->doTickPending->stopTiming();
 
 		$this->timings->entityTick->startTiming();
@@ -1541,12 +1557,27 @@ const Y_MAX = 0x100;
 	 * @param Vector3 $pos
 	 * @param int     $delay
 	 */
-	public function scheduleUpdate(Vector3 $pos, int $delay){
-		if(isset($this->updateQueueIndex[$index = Level::blockHash($pos->x, $pos->y, $pos->z)]) and $this->updateQueueIndex[$index] <= $delay){
+	public function scheduleDelayedBlockUpdate(Vector3 $pos, int $delay){
+		if(isset($this->scheduledBlockUpdateQueueIndex[$index = Level::blockHash($pos->x, $pos->y, $pos->z)]) and $this->scheduledBlockUpdateQueueIndex[$index] <= $delay){
 			return;
 		}
-		$this->updateQueueIndex[$index] = $delay;
-		$this->updateQueue->insert(new Vector3((int) $pos->x, (int) $pos->y, (int) $pos->z), (int) $delay + $this->server->getTick());
+
+		$this->scheduledBlockUpdateQueueIndex[$index] = $delay;
+		$this->scheduledBlockUpdateQueue->insert(new Vector3((int) $pos->x, (int) $pos->y, (int) $pos->z), (int) $delay + $this->server->getTick());
+	}
+
+	/**
+	 * @param Vector3 $pos
+	 */
+	public function scheduleNeighbourBlockUpdates(Vector3 $pos){
+		$pos = $pos->floor();
+
+		$this->neighbourBlockUpdateQueue->enqueue(Level::blockHash($pos->x + 1, $pos->y, $pos->z));
+		$this->neighbourBlockUpdateQueue->enqueue(Level::blockHash($pos->x - 1, $pos->y, $pos->z));
+		$this->neighbourBlockUpdateQueue->enqueue(Level::blockHash($pos->x, $pos->y + 1, $pos->z));
+		$this->neighbourBlockUpdateQueue->enqueue(Level::blockHash($pos->x, $pos->y - 1, $pos->z));
+		$this->neighbourBlockUpdateQueue->enqueue(Level::blockHash($pos->x, $pos->y, $pos->z + 1));
+		$this->neighbourBlockUpdateQueue->enqueue(Level::blockHash($pos->x, $pos->y, $pos->z - 1));
 	}
 
 	/**
@@ -1955,9 +1986,9 @@ const Y_MAX = 0x100;
 						$entity->scheduleUpdate();
 					}
 					$ev->getBlock()->onUpdate(self::BLOCK_UPDATE_NORMAL);
+					$this->scheduleNeighbourBlockUpdates($pos);
 				}
 
-				$this->updateAround($pos);
 			}
 
 			$this->timings->setBlock->stopTiming();

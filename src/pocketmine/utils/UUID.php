@@ -92,6 +92,17 @@ class UUID {
 		return $this->toString();
 	}
 
+	public function getPart(int $partNumber){
+		if($partNumber < 0 or $partNumber > 3){
+			throw new \InvalidArgumentException("Invalid UUID part index $partNumber");
+		}
+		return $this->parts[$partNumber];
+	}
+
+	public function getParts() : array{
+		return $this->parts;
+	}
+
 	public function toString(){
 		$hex = bin2hex(self::toBinary());
 

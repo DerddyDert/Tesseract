@@ -44,6 +44,7 @@ class Item extends Entity {
 	protected $item;
 	protected $gravity = 0.04;
 	protected $drag = 0.02;
+	protected $baseOffset = 0.125;
 
 	public function attack($damage, EntityDamageEvent $source){
 		if(

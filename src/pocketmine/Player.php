@@ -129,6 +129,7 @@ use pocketmine\network\protocol\EntityEventPacket;
 use pocketmine\network\protocol\FullChunkDataPacket;
 use pocketmine\network\protocol\Info as ProtocolInfo;
 use pocketmine\network\protocol\InteractPacket;
+use pocketmine\network\protocol\LevelEventPacket;
 use pocketmine\network\protocol\MovePlayerPacket;
 use pocketmine\network\protocol\PlayerActionPacket;
 use pocketmine\network\protocol\PlayStatusPacket;
@@ -854,19 +855,22 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			$this->processMovement($tickDiff);
 			$this->entityBaseTick($tickDiff);
 
-			if($this->isOnFire() or $this->lastUpdate % 10 == 0){
-				if($this->isCreative() and !$this->isInsideOfFire()){
-					$this->extinguish();
-				}elseif($this->getLevel()->getWeather()->isRainy()){
-					if($this->getLevel()->canBlockSeeSky($this)){
+			if(!$this->isSpectator()){
+				$this->checkNearEntities($tickDiff);
+				if($this->isOnFire() or $this->lastUpdate % 10 == 0){
+					if($this->isCreative() and !$this->isInsideOfFire()){
 						$this->extinguish();
+					}elseif($this->getLevel()->getWeather()->isRainy()){
+						if($this->getLevel()->canBlockSeeSky($this)){
+							$this->extinguish();
+						}
 					}
 				}
-			}
 
 
-			if($this->getTransactionQueue() !== null){
-				$this->getTransactionQueue()->execute();
+				if($this->getTransactionQueue() !== null){
+					$this->getTransactionQueue()->execute();
+				}
 			}
 		}
 
@@ -948,7 +952,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$delta = pow($this->lastX - $to->x, 2) + pow($this->lastY - $to->y, 2) + pow($this->lastZ - $to->z, 2);
 		$deltaAngle = abs($this->lastYaw - $to->yaw) + abs($this->lastPitch - $to->pitch);
 
-		if(!$revert and ($delta > (1 / 16) or $deltaAngle > 10)){
+		if(!$revert and ($delta > 0.0001 or $deltaAngle > 1.0)){
 
 			$isFirst = ($this->lastX === null or $this->lastY === null or $this->lastZ === null);
 
@@ -982,10 +986,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						$this->level->addEntityMovement($this->x >> 4, $this->z >> 4, $this->getId(), $this->x, $this->y + $this->baseOffset, $this->z, $this->yaw, $this->pitch, $this->yaw);
 					}
 				}
-			}
-
-			if(!$this->isSpectator()){
-				$this->checkNearEntities($tickDiff);
 			}
 
 			$this->speed = ($to->subtract($from))->divide($tickDiff);
@@ -1253,6 +1253,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$pk = new SetTimePacket();
 		$pk->time = $this->level->getTime();
 		$this->dataPacket($pk);
+
+		$this->sendRespawnPacket($this->level->getSafeSpawn($this));
 
 		$pk = new PlayStatusPacket();
 		$pk->status = PlayStatusPacket::PLAYER_SPAWN;
@@ -1721,21 +1723,30 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						$target = $this->level->getBlock($pos);
 						$ev = new PlayerInteractEvent($this, $this->inventory->getItemInHand(), $target, $packet->face, $target->getId() === 0 ? PlayerInteractEvent::LEFT_CLICK_AIR : PlayerInteractEvent::LEFT_CLICK_BLOCK);
 						$this->getServer()->getPluginManager()->callEvent($ev);
-						if(!$ev->isCancelled()){
-							$side = $target->getSide($packet->face);
-							if($side instanceof Fire){
-								$side->getLevel()->setBlock($side, new Air());
-								break;
-							}
-							$this->lastBreak = microtime(true);
-						}else{
+						if($ev->isCancelled()){
 							$this->inventory->sendHeldItem($this);
+							break;
 						}
+						$block = $target->getSide($packet->face);
+						if($block->getId() === Block::FIRE){
+							$this->level->setBlock($block, new Air());
+							break;
+						}
+						if(!$this->isCreative()){
+							//TODO: improve this to take stuff like swimming, ladders, enchanted tools into account, fix wrong tool break time calculations for bad tools (pmmp/PocketMine-MP#211)
+							$breakTime = ceil($target->getBreakTime($this->inventory->getItemInHand()) * 20);
+							if($breakTime > 0){
+								$this->level->broadcastLevelEvent($pos, LevelEventPacket::EVENT_BLOCK_START_BREAK, (int) (65535 / $breakTime));
+							}
+						}
+						$this->lastBreak = microtime(true);
 						break;
+
+					/** @noinspection PhpMissingBreakStatementInspection */
 					case PlayerActionPacket::ACTION_ABORT_BREAK:
 						$this->lastBreak = PHP_INT_MAX;
-						break;
 					case PlayerActionPacket::ACTION_STOP_BREAK:
+						$this->level->broadcastLevelEvent($pos, LevelEventPacket::EVENT_BLOCK_STOP_BREAK);
 						break;
 					case PlayerActionPacket::ACTION_CONTINUE_BREAK:
 						break;
@@ -1773,8 +1784,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 										new DoubleTag("", cos($this->yaw / 180 * M_PI) * cos($this->pitch / 180 * M_PI))
 									]),
 									"Rotation" => new ListTag("Rotation", [
-										new FloatTag("", $this->yaw),
-										new FloatTag("", $this->pitch)
+										new FloatTag("", ($this->yaw > 180 ? 360 : 0) - $this->yaw),
+										new FloatTag("", -$this->pitch)
 									]),
 									"Fire" => new ShortTag("Fire", $this->isOnFire() ? 45 * 60 : 0),
 									"Potion" => new ShortTag("Potion", $arrow->getDamage())
@@ -3274,8 +3285,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	}
 
 	public function sendPosition(Vector3 $pos, $yaw = null, $pitch = null, $mode = MovePlayerPacket::MODE_NORMAL, array $targets = null, $baseOffsetOverride = null){
-		$yaw = $yaw === null ? $this->yaw : $yaw;
-		$pitch = $pitch === null ? $this->pitch : $pitch;
+		$yaw = $yaw ?? $this->yaw;
+		$pitch = $pitch ?? $this->pitch;
 
 		$pk = new MovePlayerPacket();
 		$pk->eid = $this->getId();

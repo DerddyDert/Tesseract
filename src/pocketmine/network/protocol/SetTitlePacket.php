@@ -35,26 +35,26 @@ class SetTitlePacket extends DataPacket {
 	const TYPE_TIMES = 5;
 
 	public $type;
-	public $title;
-	public $fadeInDuration;
-	public $duration;
-	public $fadeOutDuration;
+	public $text = "";
+	public $fadeInTime = 0;
+	public $stayTime = 0;
+	public $fadeOutTime = 0;
 
 	public function decode(){
 		$this->type = $this->getVarInt();
-		$this->title = $this->getString();
-		$this->fadeInDuration = $this->getVarInt();
-		$this->duration = $this->getVarInt();
-		$this->fadeOutDuration = $this->getVarInt();
+		$this->text = $this->getString();
+		$this->fadeInTime = $this->getVarInt();
+		$this->stayTime = $this->getVarInt();
+		$this->fadeOutTime = $this->getVarInt();
 	}
 
 	public function encode(){
 		$this->reset();
 		$this->putVarInt($this->type);
-		$this->putString($this->title);
-		$this->putVarInt($this->fadeInDuration);
-		$this->putVarInt($this->duration);
-		$this->putVarInt($this->fadeOutDuration);
+		$this->putString($this->text);
+		$this->putVarInt($this->fadeInTime);
+		$this->putVarInt($this->stayTime);
+		$this->putVarInt($this->fadeOutTime);
 	}
 
 }

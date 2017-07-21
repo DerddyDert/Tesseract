@@ -45,6 +45,9 @@ class FallingSand extends Entity {
 	public $width = 0.98;
 	public $length = 0.98;
 	public $height = 0.98;
+
+	protected $baseOffset = 0.49;
+
 	public $canCollide = false;
 	protected $gravity = 0.04;
 	protected $drag = 0.02;
@@ -81,16 +84,6 @@ class FallingSand extends Entity {
 		$hasUpdate = $this->entityBaseTick($tickDiff);
 
 		if($this->isAlive()){
-			$pos = (new Vector3($this->x - 0.5, $this->y, $this->z - 0.5))->round();
-
-			if($this->ticksLived === 1){
-				$block = $this->level->getBlock($pos);
-				if($block->getId() !== $this->blockId){
-					return true;
-				}
-				$this->level->setBlock($pos, Block::get(0), true);
-			}
-
 			$this->motionY -= $this->gravity;
 
 			$this->move($this->motionX, $this->motionY, $this->motionZ);
@@ -188,7 +181,7 @@ class FallingSand extends Entity {
 			return;
 		}
 
-		$this->setDataProperty(self::DATA_BLOCK_INFO, self::DATA_TYPE_INT, $this->getBlock() | ($this->getDamage() << 8));
+		$this->setDataProperty(self::DATA_VARIANT, self::DATA_TYPE_INT, $this->getBlock() | ($this->getDamage() << 8));
 	}
 
 	public function getBlock(){
