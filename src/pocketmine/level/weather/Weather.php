@@ -111,7 +111,7 @@ class Weather {
 			$this->duration -= $tickDiff;
 
 			if($this->duration <= 0){
-				$duration = mt_rand(min(6000), max(12000)); //TODO: Check if this is correct.
+				$duration = mt_rand(6000, 12000); //TODO: Check if this is correct.
 
 				if($this->weatherNow === self::SUNNY){
 					$weather = $this->randomWeatherData[array_rand($this->randomWeatherData)];
