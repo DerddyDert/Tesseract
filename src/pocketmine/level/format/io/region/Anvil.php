@@ -39,10 +39,18 @@ class Anvil extends McRegion {
 
 	const REGION_FILE_EXTENSION = "mca";
 
+	/**
+	 * @return string
+	 */
 	public static function getProviderName() : string{
 		return "anvil";
 	}
 
+	/**
+	 * @param Chunk $chunk
+	 *
+	 * @return string
+	 */
 	public function nbtSerialize(Chunk $chunk) : string{
 		$nbt = new CompoundTag("Level", []);
 		$nbt->xPos = new IntTag("xPos", $chunk->getX());
@@ -103,6 +111,11 @@ class Anvil extends McRegion {
 		return $writer->writeCompressed(ZLIB_ENCODING_DEFLATE, RegionLoader::$COMPRESSION_LEVEL);
 	}
 
+	/**
+	 * @param string $data
+	 *
+	 * @return null|Chunk
+	 */
 	public function nbtDeserialize(string $data){
 		$nbt = new NBT(NBT::BIG_ENDIAN);
 		try{
@@ -159,6 +172,9 @@ class Anvil extends McRegion {
 		}
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getWorldHeight() : int{
 		//TODO: add world height options
 		return 256;

@@ -31,10 +31,19 @@ class Cactus extends VariableAmountPopulator {
 	/** @var ChunkManager */
 	private $level;
 
+	/**
+	 * Cactus constructor.
+	 */
 	public function __construct(){
 		parent::__construct(2, 1);
 	}
 
+	/**
+	 * @param ChunkManager $level
+	 * @param              $chunkX
+	 * @param              $chunkZ
+	 * @param Random       $random
+	 */
 	public function populate(ChunkManager $level, $chunkX, $chunkZ, Random $random){
 		$this->level = $level;
 		$amount = $this->getAmount($random);
@@ -50,6 +59,12 @@ class Cactus extends VariableAmountPopulator {
 		}
 	}
 
+	/**
+	 * @param $x
+	 * @param $z
+	 *
+	 * @return int
+	 */
 	private function getHighestWorkableBlock($x, $z){
 		for($y = 127; $y >= 0; --$y){
 			$b = $this->level->getBlockIdAt($x, $y, $z);

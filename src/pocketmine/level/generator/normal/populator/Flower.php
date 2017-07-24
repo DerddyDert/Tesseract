@@ -33,10 +33,19 @@ class Flower extends VariableAmountPopulator {
 	private $level;
 	private $flowerTypes = [];
 
+	/**
+	 * @return array
+	 */
 	public function getTypes(){
 		return $this->flowerTypes;
 	}
 
+	/**
+	 * @param ChunkManager $level
+	 * @param              $chunkX
+	 * @param              $chunkZ
+	 * @param Random       $random
+	 */
 	public function populate(ChunkManager $level, $chunkX, $chunkZ, Random $random){
 		$this->level = $level;
 		$amount = $this->getAmount($random);
@@ -60,10 +69,19 @@ class Flower extends VariableAmountPopulator {
 		}
 	}
 
+	/**
+	 * @param $type
+	 */
 	public function addType($type){
 		$this->flowerTypes[] = $type;
 	}
 
+	/**
+	 * @param $x
+	 * @param $z
+	 *
+	 * @return int
+	 */
 	private function getHighestWorkableBlock($x, $z){
 		for($y = 127; $y >= 0; --$y){
 			$b = $this->level->getBlockIdAt($x, $y, $z);
@@ -75,6 +93,13 @@ class Flower extends VariableAmountPopulator {
 		return $y === 0 ? -1 : ++$y;
 	}
 
+	/**
+	 * @param $x
+	 * @param $y
+	 * @param $z
+	 *
+	 * @return bool
+	 */
 	private function canFlowerStay($x, $y, $z){
 		$b = $this->level->getBlockIdAt($x, $y, $z);
 

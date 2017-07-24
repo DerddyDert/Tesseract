@@ -49,6 +49,9 @@ class Installer {
 
 	private $defaultLang;
 
+	/**
+	 * Installer constructor.
+	 */
 	public function __construct(){
 		echo "[*] Tesseract set-up wizard\n";
 		echo "[*] Please select a language:\n";
@@ -88,12 +91,20 @@ class Installer {
 		$this->endWizard();
 	}
 
+	/**
+	 * @param string $default
+	 *
+	 * @return string
+	 */
 	private function getInput($default = ""){
 		$input = trim(fgets(STDIN));
 
 		return $input === "" ? $default : $input;
 	}
 
+	/**
+	 * @return bool
+	 */
 	private function showLicense(){
 		echo $this->lang->welcome_to_pocketmine . "\n";
 		echo <<<LICENSE
@@ -243,6 +254,9 @@ LICENSE;
 		sleep(4);
 	}
 
+	/**
+	 * @return bool|string
+	 */
 	public function getDefaultLang(){
 		return $this->defaultLang;
 	}

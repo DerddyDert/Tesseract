@@ -30,14 +30,27 @@ class MelonStem extends Crops {
 
 	protected $id = self::MELON_STEM;
 
+	/**
+	 * MelonStem constructor.
+	 *
+	 * @param int $meta
+	 */
 	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		return "Melon Stem";
 	}
 
+	/**
+	 * @param int $type
+	 *
+	 * @return bool|int
+	 */
 	public function onUpdate($type){
 		if($type === Level::BLOCK_UPDATE_NORMAL){
 			if($this->getSide(0)->isTransparent() === true){
@@ -80,6 +93,11 @@ class MelonStem extends Crops {
 		return false;
 	}
 
+	/**
+	 * @param Item $item
+	 *
+	 * @return array
+	 */
 	public function getDrops(Item $item) : array{
 		return [
 			[Item::MELON_SEEDS, 0, mt_rand(0, 2)],

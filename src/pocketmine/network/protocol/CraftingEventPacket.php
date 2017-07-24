@@ -34,6 +34,9 @@ class CraftingEventPacket extends DataPacket {
 	public $input = [];
 	public $output = [];
 
+	/**
+	 * @return $this
+	 */
 	public function clean(){
 		$this->input = [];
 		$this->output = [];

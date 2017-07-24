@@ -43,6 +43,12 @@ class Ocelot extends Animal {
 
 	public $dropExp = [1, 3];
 
+	/**
+	 * Ocelot constructor.
+	 *
+	 * @param Level       $level
+	 * @param CompoundTag $nbt
+	 */
 	public function __construct(Level $level, CompoundTag $nbt){
 		if(!isset($nbt->CatType)){
 			$nbt->CatType = new ByteTag("CatType", mt_rand(0, 3));
@@ -52,18 +58,30 @@ class Ocelot extends Animal {
 		$this->setDataProperty(self::DATA_CAT_TYPE, self::DATA_TYPE_BYTE, $this->getCatType());
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getCatType() : int{
 		return (int) $this->namedtag["CatType"];
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		return "Ocelot";
 	}
 
+	/**
+	 * @param int $type
+	 */
 	public function setCatType(int $type){
 		$this->namedtag->CatType = new ByteTag("CatType", $type);
 	}
 
+	/**
+	 * @param Player $player
+	 */
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
 		$pk->eid = $this->getId();

@@ -45,6 +45,14 @@ class Arrow extends Projectile {
 	protected $isCritical;
 	protected $potionId;
 
+	/**
+	 * Arrow constructor.
+	 *
+	 * @param Level       $level
+	 * @param CompoundTag $nbt
+	 * @param Entity|null $shootingEntity
+	 * @param bool        $critical
+	 */
 	public function __construct(Level $level, CompoundTag $nbt, Entity $shootingEntity = null, $critical = false){
 		$this->isCritical = (bool) $critical;
 		if(!isset($nbt->Potion)){
@@ -55,14 +63,23 @@ class Arrow extends Projectile {
 		$this->potionId = $this->namedtag["Potion"];
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function isCritical() : bool{
 		return $this->getDataFlag(self::DATA_FLAGS, self::DATA_FLAG_CRITICAL);
 	}
 
+	/**
+	 * @param bool $value
+	 */
 	public function setCritical(bool $value = true){
 		$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_CRITICAL, $value);
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getResultDamage() : int{
 		$base = parent::getResultDamage();
 		if($this->isCritical()){
@@ -72,10 +89,18 @@ class Arrow extends Projectile {
 		}
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getPotionId() : int{
 		return $this->potionId;
 	}
 
+	/**
+	 * @param $currentTick
+	 *
+	 * @return bool
+	 */
 	public function onUpdate($currentTick){
 		if($this->closed){
 			return false;
@@ -110,6 +135,9 @@ class Arrow extends Projectile {
 		return $hasUpdate;
 	}
 
+	/**
+	 * @param Player $player
+	 */
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
 		$pk->type = Arrow::NETWORK_ID;

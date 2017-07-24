@@ -116,6 +116,10 @@ abstract class Biome {
 		self::register(self::BIRCH_FOREST, new ForestBiome(ForestBiome::TYPE_BIRCH));
 	}
 
+	/**
+	 * @param       $id
+	 * @param Biome $biome
+	 */
 	protected static function register($id, Biome $biome){
 		self::$biomes[(int) $id] = $biome;
 		$biome->setId((int) $id);
@@ -135,10 +139,16 @@ abstract class Biome {
 		}
 	}
 
+	/**
+	 * @return Populator[]
+	 */
 	public function getPopulators(){
 		return $this->populators;
 	}
 
+	/**
+	 * @param Populator $populator
+	 */
 	public function addPopulator(Populator $populator){
 		$this->populators[get_class($populator)] = $populator;
 	}
@@ -156,12 +166,21 @@ abstract class Biome {
 		$this->populators = [];
 	}
 
+	/**
+	 * @param $class
+	 */
 	public function removePopulator($class){
 		if(isset($this->populators[$class])){
 			unset($this->populators[$class]);
 		}
 	}
 
+	/**
+	 * @param ChunkManager $level
+	 * @param              $chunkX
+	 * @param              $chunkZ
+	 * @param Random       $random
+	 */
 	public function populateChunk(ChunkManager $level, $chunkX, $chunkZ, Random $random){
 		foreach($this->populators as $populator){
 			$populator->populate($level, $chunkX, $chunkZ, $random);
@@ -172,6 +191,9 @@ abstract class Biome {
 		return $this->id;
 	}
 
+	/**
+	 * @param $id
+	 */
 	public function setId($id){
 		if(!$this->registered){
 			$this->registered = true;
@@ -189,6 +211,10 @@ abstract class Biome {
 		return $this->maxElevation;
 	}
 
+	/**
+	 * @param $min
+	 * @param $max
+	 */
 	public function setElevation($min, $max){
 		$this->minElevation = $min;
 		$this->maxElevation = $max;
@@ -208,10 +234,16 @@ abstract class Biome {
 		$this->groundCover = $covers;
 	}
 
+	/**
+	 * @return float
+	 */
 	public function getTemperature(){
 		return $this->temperature;
 	}
 
+	/**
+	 * @return float
+	 */
 	public function getRainfall(){
 		return $this->rainfall;
 	}

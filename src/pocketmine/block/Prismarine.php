@@ -28,10 +28,18 @@ class Prismarine extends Solid {
 
 	protected $id = self::PRISMARINE;
 
+	/**
+	 * Prismarine constructor.
+	 *
+	 * @param int $meta
+	 */
 	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		static $names = [
 			0 => "Prismarine Block",
@@ -42,14 +50,25 @@ class Prismarine extends Solid {
 		return $names[$this->meta & 0x0f];
 	}
 
+	/**
+	 * @return float
+	 */
 	public function getHardness(){
 		return 1.5;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getToolType(){
 		return Tool::TYPE_PICKAXE;
 	}
 
+	/**
+	 * @param Item $item
+	 *
+	 * @return array
+	 */
 	public function getDrops(Item $item) : array{
 		if($item->isPickaxe() >= Tool::TIER_WOODEN){
 			return [

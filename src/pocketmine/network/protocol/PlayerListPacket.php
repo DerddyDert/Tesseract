@@ -36,6 +36,9 @@ class PlayerListPacket extends DataPacket {
 	public $entries = [];
 	public $type;
 
+	/**
+	 * @return $this
+	 */
 	public function clean(){
 		$this->entries = [];
 

@@ -34,6 +34,11 @@ class CommandReader extends Thread {
 	/** @var MainLogger */
 	private $logger;
 
+	/**
+	 * CommandReader constructor.
+	 *
+	 * @param $logger
+	 */
 	public function __construct($logger){
 		$this->stdin = fopen("php://stdin", "r");
 		$opts = getopt("", ["disable-readline"]);
@@ -115,10 +120,16 @@ class CommandReader extends Thread {
 		}
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getThreadName(){
 		return "Console";
 	}
 
+	/**
+	 * @param $line
+	 */
 	private function readline_callback($line){
 		if($line !== ""){
 			$this->buffer[] = $line;

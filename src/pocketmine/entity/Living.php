@@ -49,14 +49,26 @@ abstract class Living extends Entity implements Damageable {
 		$this->namedtag->Health = new ShortTag("Health", $this->getHealth());
 	}
 
+	/**
+	 * @return mixed
+	 */
 	public abstract function getName();
 
+	/**
+	 * @param Entity $entity
+	 *
+	 * @return bool
+	 */
 	public function hasLineOfSight(Entity $entity){
 		//TODO: head height
 		return true;
 		//return $this->getLevel()->rayTraceBlocks(Vector3::createVector($this->x, $this->y + $this->height, $this->z), Vector3::createVector($entity->x, $entity->y + $entity->height, $entity->z)) === null;
 	}
 
+	/**
+	 * @param float                   $amount
+	 * @param EntityRegainHealthEvent $source
+	 */
 	public function heal($amount, EntityRegainHealthEvent $source){
 		parent::heal($amount, $source);
 		if($source->isCancelled()){
@@ -71,6 +83,9 @@ abstract class Living extends Entity implements Damageable {
 			return;
 		}
 		parent::kill();
+	}
+
+	protected function callDeathEvent(){
 		$this->server->getPluginManager()->callEvent($ev = new EntityDeathEvent($this, $this->getDrops()));
 		foreach($ev->getDrops() as $item){
 			$this->getLevel()->dropItem($this, $item);
@@ -84,6 +99,11 @@ abstract class Living extends Entity implements Damageable {
 		return [];
 	}
 
+	/**
+	 * @param int $tickDiff
+	 *
+	 * @return bool
+	 */
 	public function entityBaseTick($tickDiff = 1){
 		Timings::$timerLivingEntityBaseTick->startTiming();
 
@@ -144,22 +164,37 @@ abstract class Living extends Entity implements Damageable {
 		return $this->getDataFlag(self::DATA_FLAGS, self::DATA_FLAG_BREATHING);
 	}
 
+	/**
+	 * @param bool $value
+	 */
 	public function setBreathing(bool $value = true){
 		$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_BREATHING, $value);
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getAirSupplyTicks() : int{
 		return $this->getDataProperty(self::DATA_AIR);
 	}
 
+	/**
+	 * @param int $ticks
+	 */
 	public function setAirSupplyTicks(int $ticks){
 		$this->setDataProperty(self::DATA_AIR, self::DATA_TYPE_SHORT, $ticks);
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getMaxAirSupplyTicks() : int{
 		return $this->getDataProperty(self::DATA_MAX_AIR);
 	}
 
+	/**
+	 * @param int $ticks
+	 */
 	public function setMaxAirSupplyTicks(int $ticks){
 		$this->setDataProperty(self::DATA_AIR, self::DATA_TYPE_SHORT, $ticks);
 	}
@@ -169,6 +204,10 @@ abstract class Living extends Entity implements Damageable {
 		$this->attack(2, $ev);
 	}
 
+	/**
+	 * @param float             $damage
+	 * @param EntityDamageEvent $source
+	 */
 	public function attack($damage, EntityDamageEvent $source){
 		if($this->attackTime > 0 or $this->noDamageTicks > 0){
 			$lastCause = $this->getLastDamageCause();
@@ -206,6 +245,13 @@ abstract class Living extends Entity implements Damageable {
 		$this->attackTime = 10; //0.5 seconds cooldown
 	}
 
+	/**
+	 * @param Entity $attacker
+	 * @param        $damage
+	 * @param        $x
+	 * @param        $z
+	 * @param float  $base
+	 */
 	public function knockBack(Entity $attacker, $damage, $x, $z, $base = 0.4){
 		$f = sqrt($x * $x + $z * $z);
 		if($f <= 0){
@@ -313,6 +359,9 @@ abstract class Living extends Entity implements Damageable {
 		else $this->setHealth($this->namedtag["Health"]);
 	}
 
+	/**
+	 * @param int $amount
+	 */
 	public function setHealth($amount){
 		$wasAlive = $this->isAlive();
 		parent::setHealth($amount);

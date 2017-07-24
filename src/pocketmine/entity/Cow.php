@@ -36,10 +36,16 @@ class Cow extends Animal {
 
 	public $dropExp = [1, 3];
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		return "Cow";
 	}
 
+	/**
+	 * @param Player $player
+	 */
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
 		$pk->eid = $this->getId();
@@ -58,6 +64,9 @@ class Cow extends Animal {
 		parent::spawnTo($player);
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getDrops(){
 		$lootingL = 0;
 		$cause = $this->lastDamageCause;

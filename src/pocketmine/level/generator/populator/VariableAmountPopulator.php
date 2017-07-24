@@ -31,16 +31,31 @@ abstract class VariableAmountPopulator extends Populator {
 	protected $randomAmount;
 	protected $odd;
 
+	/**
+	 * VariableAmountPopulator constructor.
+	 *
+	 * @param int $baseAmount
+	 * @param int $randomAmount
+	 * @param int $odd
+	 */
 	public function __construct(int $baseAmount = 0, int $randomAmount = 0, int $odd = 0){
 		$this->baseAmount = $baseAmount;
 		$this->randomAmount = $randomAmount;
 		$this->odd = $odd;
 	}
 
+	/**
+	 * @param int $odd
+	 */
 	public function setOdd(int $odd){
 		$this->odd = $odd;
 	}
 
+	/**
+	 * @param Random $random
+	 *
+	 * @return bool
+	 */
 	public function checkOdd(Random $random) : bool{
 		if($random->nextRange(0, $this->odd) == 0){
 			return true;
@@ -49,22 +64,39 @@ abstract class VariableAmountPopulator extends Populator {
 		return false;
 	}
 
+	/**
+	 * @param Random $random
+	 *
+	 * @return int
+	 */
 	public function getAmount(Random $random){
 		return $this->baseAmount + $random->nextRange(0, $this->randomAmount + 1);
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getBaseAmount() : int{
 		return $this->baseAmount;
 	}
 
+	/**
+	 * @param int $baseAmount
+	 */
 	public final function setBaseAmount(int $baseAmount){
 		$this->baseAmount = $baseAmount;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getRandomAmount() : int{
 		return $this->randomAmount;
 	}
 
+	/**
+	 * @param int $randomAmount
+	 */
 	public final function setRandomAmount(int $randomAmount){
 		$this->randomAmount = $randomAmount;
 	}

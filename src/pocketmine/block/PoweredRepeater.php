@@ -29,18 +29,34 @@ class PoweredRepeater extends Solid {
 	const ACTION_DEACTIVATE = "Repeater Deactivate";
 	protected $id = self::POWERED_REPEATER_BLOCK;
 
+	/**
+	 * PoweredRepeater constructor.
+	 *
+	 * @param int $meta
+	 */
 	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		return "Powered Repeater";
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function canBeActivated() : bool{
 		return true;
 	}
 
+	/**
+	 * @param Item $item
+	 *
+	 * @return array
+	 */
 	public function getDrops(Item $item) : array{
 		return [
 			[Item::REPEATER, 0, 1]

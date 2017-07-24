@@ -39,6 +39,12 @@ class AsyncPool {
 	/** @var int[] */
 	private $workerUsage = [];
 
+	/**
+	 * AsyncPool constructor.
+	 *
+	 * @param Server $server
+	 * @param        $size
+	 */
 	public function __construct(Server $server, $size){
 		$this->server = $server;
 		$this->size = (int) $size;
@@ -51,10 +57,16 @@ class AsyncPool {
 		}
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getSize(){
 		return $this->size;
 	}
 
+	/**
+	 * @param $newSize
+	 */
 	public function increaseSize($newSize){
 		$newSize = (int) $newSize;
 		if($newSize > $this->size){
@@ -68,6 +80,9 @@ class AsyncPool {
 		}
 	}
 
+	/**
+	 * @param AsyncTask $task
+	 */
 	public function submitTask(AsyncTask $task){
 		if(isset($this->tasks[$task->getTaskId()]) or $task->isGarbage()){
 			return;
@@ -85,6 +100,10 @@ class AsyncPool {
 		$this->submitTaskToWorker($task, $selectedWorker);
 	}
 
+	/**
+	 * @param AsyncTask $task
+	 * @param           $worker
+	 */
 	public function submitTaskToWorker(AsyncTask $task, $worker){
 		if(isset($this->tasks[$task->getTaskId()]) or $task->isGarbage()){
 			return;
@@ -122,6 +141,10 @@ class AsyncPool {
 		$this->tasks = [];
 	}
 
+	/**
+	 * @param AsyncTask $task
+	 * @param bool      $force
+	 */
 	private function removeTask(AsyncTask $task, $force = false){
 		$task->setGarbage();
 

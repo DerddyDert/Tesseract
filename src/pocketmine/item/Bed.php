@@ -25,11 +25,20 @@ use pocketmine\block\Block;
 
 class Bed extends Item {
 
+	/**
+	 * Bed constructor.
+	 *
+	 * @param int $meta
+	 * @param int $count
+	 */
 	public function __construct($meta = 0, $count = 1){
 		$this->block = Block::get(Item::BED_BLOCK);
 		parent::__construct(self::BED, 0, $count, "Bed");
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getMaxStackSize() : int{
 		return 1;
 	}

@@ -64,14 +64,25 @@ class Minecart extends Vehicle {
 		parent::initEntity();
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		return "Minecart";
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getType() : int{
 		return self::TYPE_NORMAL;
 	}
 
+	/**
+	 * @param $currentTick
+	 *
+	 * @return bool
+	 */
 	public function onUpdate($currentTick){
 		if($this->closed !== false){
 			return false;
@@ -124,6 +135,11 @@ class Minecart extends Vehicle {
 		}
 	}
 
+	/**
+	 * @param $rail
+	 *
+	 * @return bool
+	 */
 	private function isRail($rail){
 		return ($rail !== null and in_array($rail->getId(), [Block::RAIL, Block::ACTIVATOR_RAIL, Block::DETECTOR_RAIL, Block::POWERED_RAIL]));
 	}
@@ -165,6 +181,9 @@ class Minecart extends Vehicle {
 		return false;
 	}
 
+	/**
+	 * @return null|Block
+	 */
 	private function getCurrentRail(){
 		$block = $this->getLevel()->getBlock($this);
 		if($this->isRail($block)){
@@ -313,6 +332,12 @@ class Minecart extends Vehicle {
 		return $currentDirection;
 	}
 
+	/**
+	 * @param $railType
+	 * @param $currentDirection
+	 *
+	 * @return bool
+	 */
 	private function checkForVertical($railType, $currentDirection){
 		switch($railType){
 			case Rail::SLOPED_ASCENDING_NORTH:
@@ -482,6 +507,9 @@ class Minecart extends Vehicle {
 		return $nearestRail;
 	}
 
+	/**
+	 * @param Player $player
+	 */
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
 		$pk->eid = $this->getId();

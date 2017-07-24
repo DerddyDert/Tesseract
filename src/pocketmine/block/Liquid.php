@@ -37,22 +37,39 @@ abstract class Liquid extends Transparent {
 	/** @var Vector3 */
 	private $temporalVector = null;
 
+	/**
+	 * @return bool
+	 */
 	public function hasEntityCollision(){
 		return true;
 	}
 
+	/**
+	 * @param Item $item
+	 *
+	 * @return bool
+	 */
 	public function isBreakable(Item $item){
 		return false;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function canBeReplaced(){
 		return true;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function isSolid(){
 		return false;
 	}
 
+	/**
+	 * @return float|int
+	 */
 	public function getFluidHeightPercent(){
 		$d = $this->meta;
 		if($d >= 8){
@@ -62,6 +79,10 @@ abstract class Liquid extends Transparent {
 		return ($d + 1) / 9;
 	}
 
+	/**
+	 * @param Entity  $entity
+	 * @param Vector3 $vector
+	 */
 	public function addVelocityToEntity(Entity $entity, Vector3 $vector){
 		$flow = $this->getFlowVector();
 		$vector->x += $flow->x;
@@ -69,6 +90,9 @@ abstract class Liquid extends Transparent {
 		$vector->z += $flow->z;
 	}
 
+	/**
+	 * @return Vector3
+	 */
 	public function getFlowVector(){
 		$vector = new Vector3(0, 0, 0);
 
@@ -148,6 +172,11 @@ abstract class Liquid extends Transparent {
 		return $vector->normalize();
 	}
 
+	/**
+	 * @param Vector3 $pos
+	 *
+	 * @return int
+	 */
 	protected function getEffectiveFlowDecay(Vector3 $pos){
 		if(!($pos instanceof Block)){
 			$pos = $this->getLevel()->getBlock($pos);
@@ -166,6 +195,9 @@ abstract class Liquid extends Transparent {
 		return $decay;
 	}
 
+	/**
+	 * @param int $type
+	 */
 	public function onUpdate($type){
 		if($type === Level::BLOCK_UPDATE_NORMAL){
 			$this->checkForHarden();
@@ -310,6 +342,9 @@ abstract class Liquid extends Transparent {
 		}
 	}
 
+	/**
+	 * @return int
+	 */
 	public function tickRate() : int{
 		if($this instanceof Water){
 			return 5;
@@ -320,6 +355,11 @@ abstract class Liquid extends Transparent {
 		return 0;
 	}
 
+	/**
+	 * @param Vector3 $pos
+	 *
+	 * @return int
+	 */
 	protected function getFlowDecay(Vector3 $pos){
 		if(!($pos instanceof Block)){
 			$pos = $this->getLevel()->getBlock($pos);
@@ -332,6 +372,12 @@ abstract class Liquid extends Transparent {
 		}
 	}
 
+	/**
+	 * @param Vector3 $pos
+	 * @param         $decay
+	 *
+	 * @return int
+	 */
 	private function getSmallestFlowDecay(Vector3 $pos, $decay){
 		$blockDecay = $this->getFlowDecay($pos);
 		if($blockDecay < 0){
@@ -345,6 +391,10 @@ abstract class Liquid extends Transparent {
 		return ($decay >= 0 && $blockDecay >= $decay) ? $decay : $blockDecay;
 	}
 
+	/**
+	 * @param Block $block
+	 * @param       $newFlowDecay
+	 */
 	private function flowIntoBlock(Block $block, $newFlowDecay){
 		if($block->canBeFlowedInto()){
 			if($block instanceof Lava){
@@ -358,6 +408,9 @@ abstract class Liquid extends Transparent {
 		}
 	}
 
+	/**
+	 * @return array
+	 */
 	private function getOptimalFlowDirections(){
 		if($this->temporalVector === null){
 			$this->temporalVector = new Vector3(0, 0, 0);
@@ -400,6 +453,13 @@ abstract class Liquid extends Transparent {
 		return $this->isOptimalFlowDirection;
 	}
 
+	/**
+	 * @param Block $block
+	 * @param       $accumulatedCost
+	 * @param       $previousDirection
+	 *
+	 * @return int
+	 */
 	private function calculateFlowCost(Block $block, $accumulatedCost, $previousDirection){
 		$cost = 1000;
 		for($j = 0; $j < 4; ++$j){
@@ -442,14 +502,25 @@ abstract class Liquid extends Transparent {
 		return $cost;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getHardness(){
 		return 100;
 	}
 
+	/**
+	 * @return null
+	 */
 	public function getBoundingBox(){
 		return null;
 	}
 
+	/**
+	 * @param Item $item
+	 *
+	 * @return array
+	 */
 	public function getDrops(Item $item) : array{
 		return [];
 	}

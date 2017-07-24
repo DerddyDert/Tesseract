@@ -30,6 +30,12 @@ class NetherLava extends VariableAmountPopulator {
 	/** @var ChunkManager */
 	private $level;
 
+	/**
+	 * @param ChunkManager $level
+	 * @param              $chunkX
+	 * @param              $chunkZ
+	 * @param Random       $random
+	 */
 	public function populate(ChunkManager $level, $chunkX, $chunkZ, Random $random){
 		if(mt_rand(0, 100) < 5){
 			$this->level = $level;
@@ -47,6 +53,12 @@ class NetherLava extends VariableAmountPopulator {
 		}
 	}
 
+	/**
+	 * @param $x
+	 * @param $z
+	 *
+	 * @return int
+	 */
 	private function getHighestWorkableBlock($x, $z){
 		for($y = 127; $y >= 0; --$y){
 			$b = $this->level->getBlockIdAt($x, $y, $z);
@@ -58,12 +70,24 @@ class NetherLava extends VariableAmountPopulator {
 		return $y === 0 ? -1 : $y;
 	}
 
+	/**
+	 * @param $x
+	 * @param $y
+	 * @param $z
+	 *
+	 * @return bool
+	 */
 	private function canNetherLavaStay($x, $y, $z){
 		$b = $this->level->getBlockIdAt($x, $y, $z);
 
 		return $b === Block::AIR;
 	}
 
+	/**
+	 * @param $x
+	 * @param $y
+	 * @param $z
+	 */
 	private function lavaSpread($x, $y, $z){
 		if($this->level->getChunk($x >> 4, $z >> 4) == null){
 			return;
@@ -148,6 +172,16 @@ class NetherLava extends VariableAmountPopulator {
 		}
 	}
 
+	/**
+	 * @param $x1
+	 * @param $y1
+	 * @param $z1
+	 * @param $x2
+	 * @param $y2
+	 * @param $z2
+	 *
+	 * @return int
+	 */
 	private function getFlowDecay($x1, $y1, $z1, $x2, $y2, $z2){
 		if($this->level->getBlockIdAt($x1, $y1, $z1) !== $this->level->getBlockIdAt($x2, $y2, $z2)){
 			return -1;
@@ -156,6 +190,17 @@ class NetherLava extends VariableAmountPopulator {
 		}
 	}
 
+	/**
+	 * @param $x1
+	 * @param $y1
+	 * @param $z1
+	 * @param $x2
+	 * @param $y2
+	 * @param $z2
+	 * @param $decay
+	 *
+	 * @return int
+	 */
 	private function getSmallestFlowDecay($x1, $y1, $z1, $x2, $y2, $z2, $decay){
 		$blockDecay = $this->getFlowDecay($x1, $y1, $z1, $x2, $y2, $z2);
 
@@ -170,6 +215,13 @@ class NetherLava extends VariableAmountPopulator {
 		return ($decay >= 0 && $blockDecay >= $decay) ? $decay : $blockDecay;
 	}
 
+	/**
+	 * @param $x
+	 * @param $y
+	 * @param $z
+	 *
+	 * @return bool
+	 */
 	private function canFlowInto($x, $y, $z){
 		$id = $this->level->getBlockIdAt($x, $y, $z);
 		if($id === Block::AIR or $id === Block::LAVA or $id === Block::STILL_LAVA){
@@ -179,6 +231,12 @@ class NetherLava extends VariableAmountPopulator {
 		return false;
 	}
 
+	/**
+	 * @param $x
+	 * @param $y
+	 * @param $z
+	 * @param $newFlowDecay
+	 */
 	private function flowIntoBlock($x, $y, $z, $newFlowDecay){
 		if($this->level->getBlockIdAt($x, $y, $z) === Block::AIR){
 			$this->level->setBlockIdAt($x, $y, $z, Block::LAVA);
@@ -188,6 +246,13 @@ class NetherLava extends VariableAmountPopulator {
 		}
 	}
 
+	/**
+	 * @param $xx
+	 * @param $yy
+	 * @param $zz
+	 *
+	 * @return array
+	 */
 	private function getOptimalFlowDirections($xx, $yy, $zz){
 		$flowCost = [0, 0, 0, 0];
 		$isOptimalFlowDirection = [0, 0, 0, 0];
@@ -234,6 +299,15 @@ class NetherLava extends VariableAmountPopulator {
 		return $isOptimalFlowDirection;
 	}
 
+	/**
+	 * @param $xx
+	 * @param $yy
+	 * @param $zz
+	 * @param $accumulatedCost
+	 * @param $previousDirection
+	 *
+	 * @return int
+	 */
 	private function calculateFlowCost($xx, $yy, $zz, $accumulatedCost, $previousDirection){
 		$cost = 1000;
 

@@ -33,6 +33,9 @@ use pocketmine\nbt\tag\IntTag;
 
 abstract class Fallable extends Solid {
 
+	/**
+	 * @param int $type
+	 */
 	public function onUpdate($type){
 		if($type === Level::BLOCK_UPDATE_NORMAL){
 			$down = $this->getSide(Vector3::SIDE_DOWN);

@@ -36,6 +36,11 @@ class CactusStack extends Object {
 	private $randomHeight = 3;
 	private $totalHeight;
 
+	/**
+	 * CactusStack constructor.
+	 *
+	 * @param Random $random
+	 */
 	public function __construct(Random $random){
 		$this->random = $random;
 		$this->randomize();
@@ -45,6 +50,14 @@ class CactusStack extends Object {
 		$this->totalHeight = $this->baseHeight + $this->random->nextBoundedInt($this->randomHeight);
 	}
 
+	/**
+	 * @param ChunkManager $level
+	 * @param int          $x
+	 * @param int          $y
+	 * @param int          $z
+	 *
+	 * @return bool
+	 */
 	public function canPlaceObject(ChunkManager $level, int $x, int $y, int $z) : bool{
 		$below = $level->getBlockIdAt($x, $y - 1, $z);
 		if($level->getBlockIdAt($x, $y, $z) == Block::AIR and
@@ -61,6 +74,12 @@ class CactusStack extends Object {
 		return false;
 	}
 
+	/**
+	 * @param ChunkManager $level
+	 * @param int          $x
+	 * @param int          $y
+	 * @param int          $z
+	 */
 	public function placeObject(ChunkManager $level, int $x, int $y, int $z){
 		for($yy = 0; $yy < $this->totalHeight; $yy++){
 			if($level->getBlockIdAt($x, $y + $yy, $z) != Block::AIR){

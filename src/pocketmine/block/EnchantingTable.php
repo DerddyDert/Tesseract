@@ -37,14 +37,25 @@ class EnchantingTable extends Transparent {
 
 	protected $id = self::ENCHANTING_TABLE;
 
+	/**
+	 * EnchantingTable constructor.
+	 *
+	 * @param int $meta
+	 */
 	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getLightLevel(){
 		return 12;
 	}
 
+	/**
+	 * @return AxisAlignedBB
+	 */
 	public function getBoundingBox(){
 		return new AxisAlignedBB(
 			$this->x,
@@ -56,6 +67,18 @@ class EnchantingTable extends Transparent {
 		);
 	}
 
+	/**
+	 * @param Item        $item
+	 * @param Block       $block
+	 * @param Block       $target
+	 * @param int         $face
+	 * @param float       $fx
+	 * @param float       $fy
+	 * @param float       $fz
+	 * @param Player|null $player
+	 *
+	 * @return bool
+	 */
 	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
 		$this->getLevel()->setBlock($block, $this, true, true);
 		$nbt = new CompoundTag("", [
@@ -80,30 +103,48 @@ class EnchantingTable extends Transparent {
 		return true;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function canBeActivated() : bool{
 		return true;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getHardness(){
 		return 5;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getResistance(){
 		return 6000;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		return "Enchanting Table";
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getToolType(){
 		return Tool::TYPE_PICKAXE;
 	}
 
+	/**
+	 * @param Item        $item
+	 * @param Player|null $player
+	 *
+	 * @return bool
+	 */
 	public function onActivate(Item $item, Player $player = null){
-		if(!$this->getLevel()->getServer()->enchantingTableEnabled){
-			return true;
-		}
 		if($player instanceof Player){
 			if($player->isCreative() and $player->getServer()->limitedCreative){
 				return true;
@@ -142,6 +183,11 @@ class EnchantingTable extends Transparent {
 		return true;
 	}
 
+	/**
+	 * @param Item $item
+	 *
+	 * @return array
+	 */
 	public function getDrops(Item $item) : array{
 		if($item->isPickaxe() >= 1){
 			return [

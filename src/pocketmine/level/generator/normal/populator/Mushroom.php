@@ -33,10 +33,19 @@ class Mushroom extends VariableAmountPopulator {
 	/** @var ChunkManager */
 	private $level;
 
+	/**
+	 * Mushroom constructor.
+	 */
 	public function __construct(){
 		parent::__construct(1, 0, 64);
 	}
 
+	/**
+	 * @param ChunkManager $level
+	 * @param              $chunkX
+	 * @param              $chunkZ
+	 * @param Random       $random
+	 */
 	public function populate(ChunkManager $level, $chunkX, $chunkZ, Random $random){
 		if(!$this->checkOdd($random)){
 			return;
@@ -58,6 +67,12 @@ class Mushroom extends VariableAmountPopulator {
 		}
 	}
 
+	/**
+	 * @param $x
+	 * @param $z
+	 *
+	 * @return int
+	 */
 	private function getHighestWorkableBlock($x, $z){
 		for($y = 127; $y >= 0; --$y){
 			$b = $this->level->getBlockIdAt($x, $y, $z);
@@ -69,6 +84,13 @@ class Mushroom extends VariableAmountPopulator {
 		return $y === 0 ? -1 : ++$y;
 	}
 
+	/**
+	 * @param $x
+	 * @param $y
+	 * @param $z
+	 *
+	 * @return bool
+	 */
 	private function canMushroomStay($x, $y, $z){
 		$c = $this->level->getBlockIdAt($x, $y, $z);
 		$b = $this->level->getBlockIdAt($x, $y - 1, $z);

@@ -26,10 +26,18 @@ class PoweredRail extends Solid {
 
 	protected $id = self::POWERED_RAIL;
 
+	/**
+	 * PoweredRail constructor.
+	 *
+	 * @param int $meta
+	 */
 	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		return "PoweredRail";
 	}

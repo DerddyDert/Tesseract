@@ -44,6 +44,13 @@ abstract class Projectile extends Entity {
 	public $hadCollision = false;
 	protected $damage = 0;
 
+	/**
+	 * Projectile constructor.
+	 *
+	 * @param Level       $level
+	 * @param CompoundTag $nbt
+	 * @param Entity|null $shootingEntity
+	 */
 	public function __construct(Level $level, CompoundTag $nbt, Entity $shootingEntity = null){
 		$this->shootingEntity = $shootingEntity;
 		if($shootingEntity !== null){
@@ -52,16 +59,28 @@ abstract class Projectile extends Entity {
 		parent::__construct($level, $nbt);
 	}
 
+	/**
+	 * @param float             $damage
+	 * @param EntityDamageEvent $source
+	 */
 	public function attack($damage, EntityDamageEvent $source){
 		if($source->getCause() === EntityDamageEvent::CAUSE_VOID){
 			parent::attack($damage, $source);
 		}
 	}
 
+	/**
+	 * @param Entity $entity
+	 *
+	 * @return bool
+	 */
 	public function canCollideWith(Entity $entity){
 		return $entity instanceof Living and !$this->onGround;
 	}
 
+	/**
+	 * @param Entity $entity
+	 */
 	public function onCollideWithEntity(Entity $entity){
 		$this->server->getPluginManager()->callEvent(new ProjectileHitEvent($this));
 
@@ -88,6 +107,9 @@ abstract class Projectile extends Entity {
 		$this->close();
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getResultDamage() : int{
 		return ceil(sqrt($this->motionX ** 2 + $this->motionY ** 2 + $this->motionZ ** 2) * $this->damage);
 	}
@@ -97,6 +119,11 @@ abstract class Projectile extends Entity {
 		$this->namedtag->Age = new ShortTag("Age", $this->age);
 	}
 
+	/**
+	 * @param $currentTick
+	 *
+	 * @return bool
+	 */
 	public function onUpdate($currentTick){
 		if($this->closed){
 			return false;

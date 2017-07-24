@@ -32,10 +32,16 @@ class Camera extends Living {
 	public $length = 2;
 	public $height = 2;
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		return "Camera";
 	}
 
+	/**
+	 * @param Player $player
+	 */
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
 		$pk->eid = $this->getId();
@@ -53,6 +59,9 @@ class Camera extends Living {
 		parent::spawnTo($player);
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getDrops(){
 		return [];
 	}

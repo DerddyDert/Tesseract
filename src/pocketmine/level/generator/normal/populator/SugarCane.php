@@ -36,6 +36,12 @@ class SugarCane extends VariableAmountPopulator {
 	/** @var ChunkManager */
 	private $level;
 
+	/**
+	 * @param ChunkManager $level
+	 * @param              $chunkX
+	 * @param              $chunkZ
+	 * @param Random       $random
+	 */
 	public function populate(ChunkManager $level, $chunkX, $chunkZ, Random $random){
 		$this->level = $level;
 		$canes = new SugarCaneStack($random);
@@ -64,6 +70,12 @@ class SugarCane extends VariableAmountPopulator {
 		}
 	}
 
+	/**
+	 * @param $x
+	 * @param $z
+	 *
+	 * @return int
+	 */
 	private function getHighestWorkableBlock($x, $z){
 		for($y = 127; $y >= 0; --$y){
 			$b = $this->level->getBlockIdAt($x, $y, $z);

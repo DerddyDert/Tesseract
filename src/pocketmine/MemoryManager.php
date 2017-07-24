@@ -62,6 +62,11 @@ class MemoryManager {
 
 	private $leakSeed = 0;
 
+	/**
+	 * MemoryManager constructor.
+	 *
+	 * @param Server $server
+	 */
 	public function __construct(Server $server){
 		$this->server = $server;
 
@@ -122,14 +127,25 @@ class MemoryManager {
 		gc_enable();
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function isLowMemory(){
 		return $this->lowMemory;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function canUseChunkCache(){
 		return !($this->lowMemory and $this->chunkTrigger);
 	}
 
+	/**
+	 * @param $distance
+	 *
+	 * @return mixed
+	 */
 	public function getViewDistance($distance){
 		return $this->lowMemory ? min($this->chunkLimit, $distance) : $distance;
 	}
@@ -171,6 +187,12 @@ class MemoryManager {
 		Timings::$memoryManagerTimer->stopTiming();
 	}
 
+	/**
+	 * @param      $memory
+	 * @param      $limit
+	 * @param bool $global
+	 * @param int  $triggerCount
+	 */
 	public function trigger($memory, $limit, $global = false, $triggerCount = 0){
 		$this->server->getLogger()->debug("[Memory Manager] " . ($global ? "Global " : "") . "Low memory triggered, limit " . round(($limit / 1024) / 1024, 2) . "MB, using " . round(($memory / 1024) / 1024, 2) . "MB");
 
@@ -197,6 +219,9 @@ class MemoryManager {
 		$this->server->getLogger()->debug("[Memory Manager] Freed " . round(($ev->getMemoryFreed() / 1024) / 1024, 2) . "MB, $cycles cycles");
 	}
 
+	/**
+	 * @return int
+	 */
 	public function triggerGarbageCollector(){
 		Timings::$garbageCollectorTimer->startTiming();
 
@@ -247,6 +272,11 @@ class MemoryManager {
 		return $id;
 	}
 
+	/**
+	 * @param $id
+	 *
+	 * @return bool
+	 */
 	public function isObjectAlive($id){
 		if(isset($this->leakWatch[$id])){
 			return $this->leakWatch[$id]->valid();
@@ -263,6 +293,9 @@ class MemoryManager {
 		}
 	}
 
+	/**
+	 * @param $id
+	 */
 	public function removeObjectWatch($id){
 		if(!isset($this->leakWatch[$id])){
 			return;
@@ -272,6 +305,12 @@ class MemoryManager {
 		unset($this->leakWatch[$id]);
 	}
 
+	/**
+	 * @param      $id
+	 * @param bool $includeObject
+	 *
+	 * @return array|null
+	 */
 	public function getObjectInformation($id, $includeObject = false){
 		if(!isset($this->leakWatch[$id])){
 			return null;
@@ -299,6 +338,11 @@ class MemoryManager {
 		];
 	}
 
+	/**
+	 * @param $outputFolder
+	 * @param $maxNesting
+	 * @param $maxStringSize
+	 */
 	public function dumpServerMemory($outputFolder, $maxNesting, $maxStringSize){
 		gc_disable();
 		ini_set("memory_limit", -1);
@@ -388,6 +432,15 @@ class MemoryManager {
 		$this->server->forceShutdown();
 	}
 
+	/**
+	 * @param $from
+	 * @param $data
+	 * @param $objects
+	 * @param $refCounts
+	 * @param $recursion
+	 * @param $maxNesting
+	 * @param $maxStringSize
+	 */
 	private function continueDump($from, &$data, &$objects, &$refCounts, $recursion, $maxNesting, $maxStringSize){
 		if($maxNesting <= 0){
 			$data = "(error) NESTING LIMIT REACHED";

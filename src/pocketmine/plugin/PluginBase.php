@@ -97,14 +97,27 @@ abstract class PluginBase implements Plugin {
 		return $this->isEnabled === false;
 	}
 
+	/**
+	 * @return string
+	 */
 	public final function getDataFolder(){
 		return $this->dataFolder;
 	}
 
+	/**
+	 * @return PluginDescription
+	 */
 	public final function getDescription(){
 		return $this->description;
 	}
 
+	/**
+	 * @param PluginLoader      $loader
+	 * @param Server            $server
+	 * @param PluginDescription $description
+	 * @param                   $dataFolder
+	 * @param                   $file
+	 */
 	public final function init(PluginLoader $loader, Server $server, PluginDescription $description, $dataFolder, $file){
 		if($this->initialized === false){
 			$this->initialized = true;
@@ -292,6 +305,9 @@ abstract class PluginBase implements Plugin {
 		return substr($this->file, 0, 7) === "phar://";
 	}
 
+	/**
+	 * @return mixed
+	 */
 	protected function getFile(){
 		return $this->file;
 	}

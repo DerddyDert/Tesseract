@@ -30,14 +30,25 @@ class WoodSlab extends Transparent {
 
 	protected $id = self::WOOD_SLAB;
 
+	/**
+	 * WoodSlab constructor.
+	 *
+	 * @param int $meta
+	 */
 	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getHardness(){
 		return 2;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		static $names = [
 			0 => "Oak",
@@ -53,6 +64,18 @@ class WoodSlab extends Transparent {
 		return (($this->meta & 0x08) === 0x08 ? "Upper " : "") . $names[$this->meta & 0x07] . " Wooden Slab";
 	}
 
+	/**
+	 * @param Item        $item
+	 * @param Block       $block
+	 * @param Block       $target
+	 * @param int         $face
+	 * @param float       $fx
+	 * @param float       $fy
+	 * @param float       $fz
+	 * @param Player|null $player
+	 *
+	 * @return bool
+	 */
 	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
 		$this->meta &= 0x07;
 		if($face === 0){
@@ -101,16 +124,27 @@ class WoodSlab extends Transparent {
 		return true;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getToolType(){
 		return Tool::TYPE_AXE;
 	}
 
+	/**
+	 * @param Item $item
+	 *
+	 * @return array
+	 */
 	public function getDrops(Item $item) : array{
 		return [
 			[$this->id, $this->meta & 0x07, 1],
 		];
 	}
 
+	/**
+	 * @return AxisAlignedBB
+	 */
 	protected function recalculateBoundingBox(){
 
 		if(($this->meta & 0x08) > 0){

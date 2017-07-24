@@ -44,18 +44,32 @@ class StainedClay extends Solid {
 	const CLAY_BLACK = 15;
 	protected $id = self::STAINED_CLAY;
 
+	/**
+	 * StainedClay constructor.
+	 *
+	 * @param int $meta
+	 */
 	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
 
+	/**
+	 * @return float
+	 */
 	public function getHardness(){
 		return 1.25;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getToolType(){
 		return Tool::TYPE_PICKAXE;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		static $names = [
 			0 => "White Stained Clay",

@@ -76,7 +76,9 @@ use pocketmine\network\protocol\RemoveBlockPacket;
 use pocketmine\network\protocol\RemoveEntityPacket;
 use pocketmine\network\protocol\ReplaceItemInSlotPacket;
 use pocketmine\network\protocol\RequestChunkRadiusPacket;
+use pocketmine\network\protocol\ResourcePackClientResponsePacket;
 use pocketmine\network\protocol\ResourcePacksInfoPacket;
+use pocketmine\network\protocol\ResourcePackStackPacket;
 use pocketmine\network\protocol\RespawnPacket;
 use pocketmine\network\protocol\SetCommandsEnabledPacket;
 use pocketmine\network\protocol\SetDifficultyPacket;
@@ -122,6 +124,11 @@ class Network {
 
 	private $name;
 
+	/**
+	 * Network constructor.
+	 *
+	 * @param Server $server
+	 */
 	public function __construct(Server $server){
 
 		$this->registerPackets();
@@ -181,6 +188,8 @@ class Network {
 		$this->registerPacket(ProtocolInfo::REPLACE_ITEM_IN_SLOT_PACKET, ReplaceItemInSlotPacket::class);
 		$this->registerPacket(ProtocolInfo::REQUEST_CHUNK_RADIUS_PACKET, RequestChunkRadiusPacket::class);
 		$this->registerPacket(ProtocolInfo::RESOURCE_PACKS_INFO_PACKET, ResourcePacksInfoPacket::class);
+		$this->registerPacket(ProtocolInfo::RESOURCE_PACK_STACK_PACKET, ResourcePackStackPacket::class);
+		$this->registerPacket(ProtocolInfo::RESOURCE_PACK_CLIENT_RESPONSE_PACKET, ResourcePackClientResponsePacket::class);
 		$this->registerPacket(ProtocolInfo::RESPAWN_PACKET, RespawnPacket::class);
 		$this->registerPacket(ProtocolInfo::SET_COMMANDS_ENABLED_PACKET, SetCommandsEnabledPacket::class);
 		$this->registerPacket(ProtocolInfo::SET_DIFFICULTY_PACKET, SetDifficultyPacket::class);
@@ -210,15 +219,25 @@ class Network {
 		$this->packetPool[$id] = new $class;
 	}
 
+	/**
+	 * @param $upload
+	 * @param $download
+	 */
 	public function addStatistics($upload, $download){
 		$this->upload += $upload;
 		$this->download += $download;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getUpload(){
 		return $this->upload;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getDownload(){
 		return $this->download;
 	}
@@ -296,10 +315,17 @@ class Network {
 		}
 	}
 
+	/**
+	 * @return Server
+	 */
 	public function getServer(){
 		return $this->server;
 	}
 
+	/**
+	 * @param BatchPacket $packet
+	 * @param Player      $p
+	 */
 	public function processBatch(BatchPacket $packet, Player $p){
 		try{
 			if(strlen($packet->payload) === 0){

@@ -45,6 +45,9 @@ class CraftingDataPacket extends DataPacket {
 	public $entries = [];
 	public $cleanRecipes = false;
 
+	/**
+	 * @return $this
+	 */
 	public function clean(){
 		$this->entries = [];
 
@@ -108,14 +111,23 @@ class CraftingDataPacket extends DataPacket {
 		$this->getBool(); //cleanRecipes
 	}
 
+	/**
+	 * @param ShapelessRecipe $recipe
+	 */
 	public function addShapelessRecipe(ShapelessRecipe $recipe){
 		$this->entries[] = $recipe;
 	}
 
+	/**
+	 * @param ShapedRecipe $recipe
+	 */
 	public function addShapedRecipe(ShapedRecipe $recipe){
 		$this->entries[] = $recipe;
 	}
 
+	/**
+	 * @param FurnaceRecipe $recipe
+	 */
 	public function addFurnaceRecipe(FurnaceRecipe $recipe){
 		$this->entries[] = $recipe;
 	}
@@ -140,6 +152,12 @@ class CraftingDataPacket extends DataPacket {
 		$this->putBool($this->cleanRecipes);
 	}
 
+	/**
+	 * @param              $entry
+	 * @param BinaryStream $stream
+	 *
+	 * @return int
+	 */
 	private static function writeEntry($entry, BinaryStream $stream){
 		if($entry instanceof ShapelessRecipe){
 			return self::writeShapelessRecipe($entry, $stream);
@@ -154,6 +172,12 @@ class CraftingDataPacket extends DataPacket {
 		return -1;
 	}
 
+	/**
+	 * @param ShapelessRecipe $recipe
+	 * @param BinaryStream    $stream
+	 *
+	 * @return int
+	 */
 	private static function writeShapelessRecipe(ShapelessRecipe $recipe, BinaryStream $stream){
 		$stream->putUnsignedVarInt($recipe->getIngredientCount());
 		foreach($recipe->getIngredientList() as $item){
@@ -168,6 +192,12 @@ class CraftingDataPacket extends DataPacket {
 		return CraftingDataPacket::ENTRY_SHAPELESS;
 	}
 
+	/**
+	 * @param ShapedRecipe $recipe
+	 * @param BinaryStream $stream
+	 *
+	 * @return int
+	 */
 	private static function writeShapedRecipe(ShapedRecipe $recipe, BinaryStream $stream){
 		$stream->putVarInt($recipe->getWidth());
 		$stream->putVarInt($recipe->getHeight());
@@ -186,6 +216,12 @@ class CraftingDataPacket extends DataPacket {
 		return CraftingDataPacket::ENTRY_SHAPED;
 	}
 
+	/**
+	 * @param FurnaceRecipe $recipe
+	 * @param BinaryStream  $stream
+	 *
+	 * @return int
+	 */
 	private static function writeFurnaceRecipe(FurnaceRecipe $recipe, BinaryStream $stream){
 		if(!$recipe->getInput()->hasAnyDamageValue()){ //Data recipe
 			$stream->putVarInt($recipe->getInput()->getId());

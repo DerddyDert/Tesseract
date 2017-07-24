@@ -26,6 +26,9 @@ use pocketmine\Player;
 abstract class TemporaryInventory extends ContainerInventory {
 	//TODO
 
+	/**
+	 * @param Player $who
+	 */
 	public function onClose(Player $who){
 		foreach($this->getContents() as $slot => $item){
 			if($slot === $this->getResultSlotIndex()){
@@ -37,5 +40,8 @@ abstract class TemporaryInventory extends ContainerInventory {
 		$this->clearAll();
 	}
 
+	/**
+	 * @return mixed
+	 */
 	abstract public function getResultSlotIndex();
 }

@@ -62,6 +62,11 @@ class Nether extends Generator {
 	/** @var Simplex */
 	private $noiseBase;
 
+	/**
+	 * Nether constructor.
+	 *
+	 * @param array $options
+	 */
 	public function __construct(array $options = []){
 		if(self::$GAUSSIAN_KERNEL === null){
 			self::generateKernel();
@@ -85,18 +90,31 @@ class Nether extends Generator {
 		}
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		return "Nether";
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getWaterHeight() : int{
 		return $this->waterHeight;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getSettings(){
 		return [];
 	}
 
+	/**
+	 * @param ChunkManager $level
+	 * @param Random       $random
+	 */
 	public function init(ChunkManager $level, Random $random){
 		$this->level = $level;
 		$this->random = $random;
@@ -123,6 +141,10 @@ class Nether extends Generator {
 		$this->populators[] = $lava;
 	}
 
+	/**
+	 * @param $chunkX
+	 * @param $chunkZ
+	 */
 	public function generateChunk($chunkX, $chunkZ){
 		$this->random->setSeed(0xdeadbeef ^ $chunkX ^ $chunkZ ^ $this->level->getSeed());
 
@@ -159,6 +181,10 @@ class Nether extends Generator {
 		}
 	}
 
+	/**
+	 * @param $chunkX
+	 * @param $chunkZ
+	 */
 	public function populateChunk($chunkX, $chunkZ){
 		$this->random->setSeed(0xdeadbeef ^ $chunkX ^ $chunkZ ^ $this->level->getSeed());
 		foreach($this->populators as $populator){
@@ -170,6 +196,9 @@ class Nether extends Generator {
 		$biome->populateChunk($this->level, $chunkX, $chunkZ, $this->random);
 	}
 
+	/**
+	 * @return Vector3
+	 */
 	public function getSpawn(){
 		return new Vector3(127.5, 128, 127.5);
 	}

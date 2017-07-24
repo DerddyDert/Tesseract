@@ -27,10 +27,20 @@ class NetherBrickFence extends Transparent {
 
 	protected $id = self::NETHER_BRICK_FENCE;
 
+	/**
+	 * NetherBrickFence constructor.
+	 *
+	 * @param int $meta
+	 */
 	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
 
+	/**
+	 * @param Item $item
+	 *
+	 * @return float|int
+	 */
 	public function getBreakTime(Item $item){
 		if($item instanceof Air){
 			//Breaking by hand
@@ -41,23 +51,42 @@ class NetherBrickFence extends Transparent {
 		}
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getHardness(){
 		return 2;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getToolType(){
 		//Different then the woodfences
 		return Tool::TYPE_PICKAXE;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		return "Nether Brick Fence";
 	}
 
+	/**
+	 * @param Block $block
+	 *
+	 * @return bool
+	 */
 	public function canConnect(Block $block){
 		return ($block instanceof NetherBrickFence) or ($block->isSolid() and !$block->isTransparent());
 	}
 
+	/**
+	 * @param Item $item
+	 *
+	 * @return array
+	 */
 	public function getDrops(Item $item) : array{
 		if($item->isPickaxe() >= Tool::TIER_WOODEN){
 			return [

@@ -34,6 +34,11 @@ class BanEntry {
 	private $expirationDate = null;
 	private $reason = "Banned by an operator.";
 
+	/**
+	 * BanEntry constructor.
+	 *
+	 * @param $name
+	 */
 	public function __construct($name){
 		$this->name = strtolower($name);
 		$this->creationDate = new \DateTime();
@@ -76,6 +81,9 @@ class BanEntry {
 		}
 	}
 
+	/**
+	 * @param \DateTime $date
+	 */
 	public function setCreated(\DateTime $date){
 		$this->creationDate = $date;
 	}
@@ -87,12 +95,18 @@ class BanEntry {
 		$this->expirationDate = $date;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function hasExpired(){
 		$now = new \DateTime();
 
 		return $this->expirationDate === null ? false : $this->expirationDate < $now;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getString(){
 		$str = "";
 		$str .= $this->getName();
@@ -108,30 +122,51 @@ class BanEntry {
 		return $str;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		return $this->name;
 	}
 
+	/**
+	 * @return \DateTime
+	 */
 	public function getCreated(){
 		return $this->creationDate;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getSource(){
 		return $this->source;
 	}
 
+	/**
+	 * @param $source
+	 */
 	public function setSource($source){
 		$this->source = $source;
 	}
 
+	/**
+	 * @return \DateTime
+	 */
 	public function getExpires(){
 		return $this->expirationDate;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getReason(){
 		return $this->reason;
 	}
 
+	/**
+	 * @param $reason
+	 */
 	public function setReason($reason){
 		$this->reason = $reason;
 	}

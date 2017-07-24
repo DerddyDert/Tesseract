@@ -34,10 +34,16 @@ class Mooshroom extends Animal {
 	public $length = 0.9;
 	public $height = 1.8;
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		return "Mooshroom";
 	}
 
+	/**
+	 * @param Player $player
+	 */
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
 		$pk->eid = $this->getId();
@@ -56,6 +62,9 @@ class Mooshroom extends Animal {
 		parent::spawnTo($player);
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getDrops(){
 		$lootingL = 0;
 		$cause = $this->lastDamageCause;

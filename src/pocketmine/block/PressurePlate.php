@@ -31,28 +31,55 @@ use pocketmine\Player;
 
 class PressurePlate extends Solid {
 
+	/**
+	 * PressurePlate constructor.
+	 *
+	 * @param int $meta
+	 */
 	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function hasEntityCollision(){
 		return true;
 	}
 
+	/**
+	 * @param Item        $item
+	 * @param Block       $block
+	 * @param Block       $target
+	 * @param int         $face
+	 * @param float       $fx
+	 * @param float       $fy
+	 * @param float       $fz
+	 * @param Player|null $player
+	 */
 	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
 		$below = $this->getSide(Vector3::SIDE_DOWN);
 		if($below instanceof Transparent) return;
 		else $this->getLevel()->setBlock($block, $this, true, false);
 	}
 
+	/**
+	 * @param Item $item
+	 */
 	public function onBreak(Item $item){
 		$this->getLevel()->setBlock($this, new Air(), true);
 	}
 
+	/**
+	 * @return float
+	 */
 	public function getHardness(){
 		return 0.5;
 	}
 
+	/**
+	 * @return float
+	 */
 	public function getResistance(){
 		return 2.5;
 	}

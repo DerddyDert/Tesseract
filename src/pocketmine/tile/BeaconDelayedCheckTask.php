@@ -32,11 +32,20 @@ class BeaconDelayedCheckTask extends Task {
 	private $pos;
 	private $levelId;
 
+	/**
+	 * BeaconDelayedCheckTask constructor.
+	 *
+	 * @param Vector3 $pos
+	 * @param         $levelId
+	 */
 	public function __construct(Vector3 $pos, $levelId){
 		$this->pos = $pos;
 		$this->levelId = $levelId;
 	}
 
+	/**
+	 * @param $currentTick
+	 */
 	public function onRun($currentTick){
 		$level = Server::getInstance()->getLevel($this->levelId);
 		if(!Server::getInstance()->isLevelLoaded($level->getName()) || !$level->isChunkLoaded($this->pos->x >> 4, $this->pos->z >> 4)) return;

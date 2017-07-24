@@ -31,10 +31,16 @@ class WitherSkeleton extends Monster implements ProjectileSource {
 
 	public $dropExp = [5, 5];
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		return "Wither Skeleton";
 	}
 
+	/**
+	 * @param Player $player
+	 */
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
 		$pk->eid = $this->getId();

@@ -39,10 +39,22 @@ class ThrownExpBottle extends Projectile {
 
 	private $hasSplashed = false;
 
+	/**
+	 * ThrownExpBottle constructor.
+	 *
+	 * @param Level       $level
+	 * @param CompoundTag $nbt
+	 * @param Entity|null $shootingEntity
+	 */
 	public function __construct(Level $level, CompoundTag $nbt, Entity $shootingEntity = null){
 		parent::__construct($level, $nbt, $shootingEntity);
 	}
 
+	/**
+	 * @param $currentTick
+	 *
+	 * @return bool
+	 */
 	public function onUpdate($currentTick){
 		if($this->closed){
 			return false;
@@ -78,6 +90,9 @@ class ThrownExpBottle extends Projectile {
 		}
 	}
 
+	/**
+	 * @param Player $player
+	 */
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
 		$pk->type = ThrownExpBottle::NETWORK_ID;

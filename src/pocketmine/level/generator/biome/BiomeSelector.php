@@ -40,6 +40,12 @@ class BiomeSelector {
 	private $map = [];
 
 
+	/**
+	 * BiomeSelector constructor.
+	 *
+	 * @param Random $random
+	 * @param Biome  $fallback
+	 */
 	public function __construct(Random $random, Biome $fallback){
 		$this->fallback = $fallback;
 		$this->temperature = new Simplex($random, 2, 1 / 16, 1 / 512);
@@ -56,6 +62,12 @@ class BiomeSelector {
 		}
 	}
 
+	/**
+	 * @param $temperature
+	 * @param $rainfall
+	 *
+	 * @return int
+	 */
 	public function lookup($temperature, $rainfall){
 		if($rainfall < 0.25){
 			if($temperature < 0.7){
@@ -94,6 +106,9 @@ class BiomeSelector {
 		}
 	}
 
+	/**
+	 * @param Biome $biome
+	 */
 	public function addBiome(Biome $biome){
 		$this->biomes[$biome->getId()] = $biome;
 	}
@@ -113,10 +128,22 @@ class BiomeSelector {
 		return isset($this->biomes[$biomeId]) ? $this->biomes[$biomeId] : $this->fallback;
 	}
 
+	/**
+	 * @param $x
+	 * @param $z
+	 *
+	 * @return float|int
+	 */
 	public function getTemperature($x, $z){
 		return ($this->temperature->noise2D($x, $z, true) + 1) / 2;
 	}
 
+	/**
+	 * @param $x
+	 * @param $z
+	 *
+	 * @return float|int
+	 */
 	public function getRainfall($x, $z){
 		return ($this->rainfall->noise2D($x, $z, true) + 1) / 2;
 	}

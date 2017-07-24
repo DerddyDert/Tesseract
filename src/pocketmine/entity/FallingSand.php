@@ -54,16 +54,30 @@ class FallingSand extends Entity {
 	protected $blockId = 0;
 	protected $damage;
 
+	/**
+	 * @param Entity $entity
+	 *
+	 * @return bool
+	 */
 	public function canCollideWith(Entity $entity){
 		return false;
 	}
 
+	/**
+	 * @param float             $damage
+	 * @param EntityDamageEvent $source
+	 */
 	public function attack($damage, EntityDamageEvent $source){
 		if($source->getCause() === EntityDamageEvent::CAUSE_VOID){
 			parent::attack($damage, $source);
 		}
 	}
 
+	/**
+	 * @param $currentTick
+	 *
+	 * @return bool
+	 */
 	public function onUpdate($currentTick){
 
 		if($this->closed){
@@ -144,6 +158,9 @@ class FallingSand extends Entity {
 		$this->namedtag->Data = new ByteTag("Data", $this->damage);
 	}
 
+	/**
+	 * @param Player $player
+	 */
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
 		$pk->type = FallingSand::NETWORK_ID;
@@ -184,10 +201,16 @@ class FallingSand extends Entity {
 		$this->setDataProperty(self::DATA_VARIANT, self::DATA_TYPE_INT, $this->getBlock() | ($this->getDamage() << 8));
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getBlock(){
 		return $this->blockId;
 	}
 
+	/**
+	 * @return mixed
+	 */
 	public function getDamage(){
 		return $this->damage;
 	}

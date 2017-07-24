@@ -29,10 +29,20 @@ use pocketmine\Player;
 use pocketmine\tile\Chest;
 
 class ChestInventory extends ContainerInventory {
+	/**
+	 * ChestInventory constructor.
+	 *
+	 * @param Chest $tile
+	 */
 	public function __construct(Chest $tile){
 		parent::__construct($tile, InventoryType::get(InventoryType::CHEST));
 	}
 
+	/**
+	 * @param bool $withAir
+	 *
+	 * @return array|\pocketmine\item\Item[]
+	 */
 	public function getContents($withAir = false){
 		if($withAir){
 			$contents = [];
@@ -46,6 +56,9 @@ class ChestInventory extends ContainerInventory {
 		return parent::getContents();
 	}
 
+	/**
+	 * @param Player $who
+	 */
 	public function onOpen(Player $who){
 		parent::onOpen($who);
 
@@ -79,6 +92,9 @@ class ChestInventory extends ContainerInventory {
 		return $this->holder;
 	}
 
+	/**
+	 * @param Player $who
+	 */
 	public function onClose(Player $who){
 		if($this->getHolder()->getLevel() instanceof Level){
 			/** @var TrappedChest $block */

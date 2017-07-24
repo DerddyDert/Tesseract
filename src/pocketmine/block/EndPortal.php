@@ -29,26 +29,48 @@ class EndPortal extends Transparent {
 
 	protected $id = Block::END_PORTAL;
 
+	/**
+	 * EndPortal constructor.
+	 *
+	 * @param int $meta
+	 */
 	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName(){
 		return "End Portal";
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getLightLevel(){
 		return 15;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getHardness(){
 		return -1;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getResistance(){
 		return 18000000;
 	}
 
+	/**
+	 * @param Item $item
+	 *
+	 * @return bool
+	 */
 	public function isBreakable(Item $item){
 		return false;
 	}

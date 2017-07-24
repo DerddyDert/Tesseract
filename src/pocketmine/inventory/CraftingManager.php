@@ -43,6 +43,9 @@ class CraftingManager {
 	/** @var CraftingDataPacket */
 	private $craftingDataCache;
 
+	/**
+	 * CraftingManager constructor.
+	 */
 	public function __construct(){
 		$this->registerBrewingStand();
 
@@ -341,6 +344,12 @@ class CraftingManager {
 		return $this->craftingDataCache;
 	}
 
+	/**
+	 * @param Item $i1
+	 * @param Item $i2
+	 *
+	 * @return int
+	 */
 	public function sort(Item $i1, Item $i2){
 		if($i1->getId() > $i2->getId()){
 			return 1;
@@ -377,6 +386,11 @@ class CraftingManager {
 		return $this->recipes;
 	}
 
+	/**
+	 * @param Item $item
+	 *
+	 * @return array
+	 */
 	public function getRecipesByResult(Item $item){
 		return @array_values($this->recipeLookup[$item->getId() . ":" . $item->getDamage()]) ?? [];
 	}

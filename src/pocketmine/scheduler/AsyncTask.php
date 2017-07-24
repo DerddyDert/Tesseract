@@ -49,6 +49,9 @@ abstract class AsyncTask extends \Threaded implements \Collectable {
 		$this->isGarbage = true;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function isFinished() : bool{
 		return $this->isFinished;
 	}
@@ -77,6 +80,9 @@ abstract class AsyncTask extends \Threaded implements \Collectable {
 	 */
 	public abstract function onRun();
 
+	/**
+	 * @return bool
+	 */
 	public function isCrashed(){
 		return $this->crashed;
 	}
@@ -101,6 +107,9 @@ abstract class AsyncTask extends \Threaded implements \Collectable {
 		$this->cancelRun = true;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function hasCancelledRun(){
 		return $this->cancelRun === true;
 	}
@@ -112,10 +121,16 @@ abstract class AsyncTask extends \Threaded implements \Collectable {
 		return $this->result !== null;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getTaskId(){
 		return $this->taskId;
 	}
 
+	/**
+	 * @param $taskId
+	 */
 	public function setTaskId($taskId){
 		$this->taskId = $taskId;
 	}
@@ -134,6 +149,9 @@ abstract class AsyncTask extends \Threaded implements \Collectable {
 		return $this->isGarbage() ? null : $store[$identifier];
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function isGarbage() : bool{
 		return $this->isGarbage;
 	}

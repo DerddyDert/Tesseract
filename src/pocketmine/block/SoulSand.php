@@ -29,22 +29,39 @@ class SoulSand extends Solid {
 
 	protected $id = self::SOUL_SAND;
 
+	/**
+	 * SoulSand constructor.
+	 *
+	 * @param int $meta
+	 */
 	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		return "Soul Sand";
 	}
 
+	/**
+	 * @return float
+	 */
 	public function getHardness(){
 		return 0.5;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getToolType(){
 		return Tool::TYPE_SHOVEL;
 	}
 
+	/**
+	 * @return AxisAlignedBB
+	 */
 	protected function recalculateBoundingBox(){
 
 		return new AxisAlignedBB(

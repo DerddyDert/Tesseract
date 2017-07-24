@@ -72,6 +72,9 @@ abstract class Terminal {
 		//TODO: iOS
 	}
 
+	/**
+	 * @return bool|null
+	 */
 	public static function hasFormattingCodes(){
 		if(self::$formattingCodes === null){
 			$opts = getopt("", ["enable-ansi", "disable-ansi"]);

@@ -37,6 +37,11 @@ class SugarCaneStack extends Object {
 	private $randomHeight = 4;
 	private $totalHeight;
 
+	/**
+	 * SugarCaneStack constructor.
+	 *
+	 * @param Random $random
+	 */
 	public function __construct(Random $random){
 		$this->random = $random;
 		$this->randomize();
@@ -46,6 +51,14 @@ class SugarCaneStack extends Object {
 		$this->totalHeight = $this->baseHeight + $this->random->nextBoundedInt($this->randomHeight);
 	}
 
+	/**
+	 * @param ChunkManager $level
+	 * @param int          $x
+	 * @param int          $y
+	 * @param int          $z
+	 *
+	 * @return bool
+	 */
 	public function canPlaceObject(ChunkManager $level, int $x, int $y, int $z) : bool{
 		$below = $level->getBlockIdAt($x, $y - 1, $z);
 		if($level->getBlockIdAt($x, $y, $z) == Block::AIR and
@@ -62,6 +75,11 @@ class SugarCaneStack extends Object {
 		return false;
 	}
 
+	/**
+	 * @param int $id
+	 *
+	 * @return bool
+	 */
 	private function isWater(int $id) : bool{
 		if($id == Block::WATER or $id == Block::STILL_WATER){
 			return true;
@@ -70,6 +88,12 @@ class SugarCaneStack extends Object {
 		return false;
 	}
 
+	/**
+	 * @param ChunkManager $level
+	 * @param int          $x
+	 * @param int          $y
+	 * @param int          $z
+	 */
 	public function placeObject(ChunkManager $level, int $x, int $y, int $z){
 		for($yy = 0; $yy < $this->totalHeight; $yy++){
 			if($level->getBlockIdAt($x, $y + $yy, $z) != Block::AIR){

@@ -43,6 +43,13 @@ class FishingHook extends Projectile {
 	protected $gravity = 0.1;
 	protected $drag = 0.05;
 
+	/**
+	 * FishingHook constructor.
+	 *
+	 * @param Level       $level
+	 * @param CompoundTag $nbt
+	 * @param Entity|null $shootingEntity
+	 */
 	public function __construct(Level $level, CompoundTag $nbt, Entity $shootingEntity = null){
 		parent::__construct($level, $nbt, $shootingEntity);
 	}
@@ -57,14 +64,25 @@ class FishingHook extends Projectile {
 		// $this->setDataProperty(FallingSand::DATA_BLOCK_INFO, self::DATA_TYPE_INT, $this->getData());
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getData(){
 		return $this->data;
 	}
 
+	/**
+	 * @param $id
+	 */
 	public function setData($id){
 		$this->data = $id;
 	}
 
+	/**
+	 * @param $currentTick
+	 *
+	 * @return bool
+	 */
 	public function onUpdate($currentTick){
 		if($this->closed){
 			return false;
@@ -124,6 +142,9 @@ class FishingHook extends Projectile {
 		}
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function reelLine(){
 		$this->damageRod = false;
 
@@ -151,6 +172,9 @@ class FishingHook extends Projectile {
 		return $this->damageRod;
 	}
 
+	/**
+	 * @param Player $player
+	 */
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
 		$pk->eid = $this->getId();

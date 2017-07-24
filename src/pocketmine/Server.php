@@ -598,6 +598,11 @@ class Server {
 		}
 	}
 
+	/**
+	 * @param string $prefix
+	 *
+	 * @return string
+	 */
 	public function getFormattedVersion($prefix = ""){
 		return (\pocketmine\VERSION !== "" ? $prefix . \pocketmine\VERSION : "");
 	}
@@ -652,6 +657,11 @@ class Server {
 		return $this->properties->exists($variable) ? $this->properties->get($variable) : $defaultValue;
 	}
 
+	/**
+	 * @param $type
+	 *
+	 * @return string
+	 */
 	public function isExtensionInstalled($type){
 		switch($type){
 
@@ -682,6 +692,9 @@ class Server {
 		$this->properties->set($variable, $value == true ? "1" : "0");
 	}
 
+	/**
+	 * @return string
+	 */
 	public function checkAuthentication(){
 		if($this->isExtensionInstalled("OpenSSL") == "false"){
 			return "offline mode/insecure";
@@ -788,6 +801,9 @@ class Server {
 		return \pocketmine\VERSION;
 	}
 
+	/**
+	 * @return UUID
+	 */
 	public function getServerUniqueId(){
 		return $this->serverID;
 	}
@@ -1366,6 +1382,10 @@ class Server {
 		return false;
 	}
 
+	/**
+	 * @param $currentTick
+	 * @param $tickTime
+	 */
 	private function checkTickUpdates($currentTick, $tickTime){
 		foreach($this->players as $p){
 			if(!$p->loggedIn and ($tickTime - $p->creationTime) >= 10){
@@ -1534,6 +1554,10 @@ class Server {
 		return $this->memoryManager;
 	}
 
+	/**
+	 * @param \Throwable $e
+	 * @param null       $trace
+	 */
 	public function exceptionHandler(\Throwable $e, $trace = null){
 		if($e === null){
 			return;
@@ -1678,6 +1702,9 @@ class Server {
 		return self::$instance;
 	}
 
+	/**
+	 * @param int $microseconds
+	 */
 	public static function microSleep(int $microseconds){
 		Server::$sleeper->synchronized(function(int $ms){
 			Server::$sleeper->wait($ms);
@@ -1916,6 +1943,9 @@ class Server {
 		return $this->commandMap;
 	}
 
+	/**
+	 * @param Recipe $recipe
+	 */
 	public function addRecipe(Recipe $recipe){
 		$this->craftingManager->registerRecipe($recipe);
 	}
@@ -2038,6 +2068,9 @@ class Server {
 		return $this->dataPath;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function shouldSavePlayerData() : bool{
 		return (bool) $this->getProperty("player.save-player-data", true);
 	}
@@ -2164,6 +2197,9 @@ class Server {
 		return $this->banByName;
 	}
 
+	/**
+	 * @return BanList
+	 */
 	public function getCIDBans(){
 		return $this->banByCID;
 	}
@@ -2273,10 +2309,18 @@ class Server {
 		return $result;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getCrashPath(){
 		return $this->dataPath . "crashdumps/";
 	}
 
+	/**
+	 * @param $url
+	 *
+	 * @return mixed
+	 */
 	function curl($url){
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -2295,6 +2339,9 @@ class Server {
 		return $this->maxPlayers;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function getOnlineMode(){
 
 		return $this->getConfigBoolean("online-mode", false);
@@ -2446,20 +2493,32 @@ class Server {
 		$this->whitelist->reload();
 	}
 
+	/**
+	 * @return QueryRegenerateEvent
+	 */
 	public function getQueryInformation(){
 		return $this->queryRegenerateTask;
 	}
 
+	/**
+	 * @param $signo
+	 */
 	public function handleSignal($signo){
 		if($signo === SIGTERM or $signo === SIGINT or $signo === SIGHUP){
 			$this->shutdown();
 		}
 	}
 
+	/**
+	 * @return array
+	 */
 	public function __debugInfo(){
 		return [];
 	}
 
+	/**
+	 * @param Player $player
+	 */
 	public function onPlayerLogin(Player $player){
 		if($this->sendUsageTicker > 0){
 			$this->uniquePlayers[$player->getRawUniqueId()] = $player->getRawUniqueId();
@@ -2469,6 +2528,9 @@ class Server {
 		$player->dataPacket($this->craftingManager->getCraftingDataPacket());
 	}
 
+	/**
+	 * @param Player $p
+	 */
 	public function sendFullPlayerListData(Player $p){
 		$pk = new PlayerListPacket();
 		$pk->type = PlayerListPacket::TYPE_ADD;
@@ -2479,17 +2541,32 @@ class Server {
 		$p->dataPacket($pk);
 	}
 
+	/**
+	 * @param        $identifier
+	 * @param Player $player
+	 */
 	public function addPlayer($identifier, Player $player){
 		$this->players[$identifier] = $player;
 		$this->identifiers[spl_object_hash($player)] = $identifier;
 	}
 
+	/**
+	 * @param Player $player
+	 */
 	public function addOnlinePlayer(Player $player){
 		$this->playerList[$player->getRawUniqueId()] = $player;
 
 		$this->updatePlayerListData($player->getUniqueId(), $player->getId(), $player->getDisplayName(), $player->getSkinId(), $player->getSkinData());
 	}
 
+	/**
+	 * @param UUID       $uuid
+	 * @param            $entityId
+	 * @param            $name
+	 * @param            $skinId
+	 * @param            $skinData
+	 * @param array|null $players
+	 */
 	public function updatePlayerListData(UUID $uuid, $entityId, $name, $skinId, $skinData, array $players = null){
 		$pk = new PlayerListPacket();
 		$pk->type = PlayerListPacket::TYPE_ADD;
@@ -2527,7 +2604,7 @@ class Server {
 	 * @param DataPacket[]|string $packets
 	 * @param bool                $forceSync
 	 */
-	public function batchPackets(array $players, array $packets, $forceSync = false){
+	public function batchPackets(array $players, array $packets, $forceSync = false, bool $immediate = false){
 		Timings::$playerNetworkTimer->startTiming();
 		$str = "";
 
@@ -2550,28 +2627,43 @@ class Server {
 		}
 
 		if(!$forceSync and $this->networkCompressionAsync){
-			$task = new CompressBatchedTask($str, $targets, $this->networkCompressionLevel);
+			$task = new CompressBatchedTask($str, $targets, $this->networkCompressionLevel, $immediate);
 			$this->getScheduler()->scheduleAsyncTask($task);
 		}else{
-			$this->broadcastPacketsCallback(zlib_encode($str, ZLIB_ENCODING_DEFLATE, $this->networkCompressionLevel), $targets);
+			$this->broadcastPacketsCallback(zlib_encode($str, ZLIB_ENCODING_DEFLATE, $this->networkCompressionLevel), $targets, $immediate);
 		}
 
 		Timings::$playerNetworkTimer->stopTiming();
 	}
 
-	public function broadcastPacketsCallback($data, array $identifiers){
+	/**
+	 * @param       $data
+	 * @param array $identifiers
+	 */
+	public function broadcastPacketsCallback($data, array $identifiers, bool $immediate){
 		$pk = new BatchPacket();
 		$pk->payload = $data;
 		$pk->encode();
 		$pk->isEncoded = true;
 
-		foreach($identifiers as $i){
-			if(isset($this->players[$i])){
-				$this->players[$i]->dataPacket($pk);
+		if($immediate){
+			foreach($identifiers as $i){
+				if(isset($this->players[$i])){
+					$this->players[$i]->directDataPacket($pk);
+				}
+			}
+		}else{
+			foreach($identifiers as $i){
+				if(isset($this->players[$i])){
+					$this->players[$i]->dataPacket($pk);
+				}
 			}
 		}
 	}
 
+	/**
+	 * @param Player $player
+	 */
 	public function removeOnlinePlayer(Player $player){
 		if(isset($this->playerList[$player->getRawUniqueId()])){
 			unset($this->playerList[$player->getRawUniqueId()]);
@@ -2583,6 +2675,10 @@ class Server {
 		}
 	}
 
+	/**
+	 * @param UUID       $uuid
+	 * @param array|null $players
+	 */
 	public function removePlayerListData(UUID $uuid, array $players = null){
 		$pk = new PlayerListPacket();
 		$pk->type = PlayerListPacket::TYPE_REMOVE;

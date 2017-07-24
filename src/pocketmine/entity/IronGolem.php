@@ -37,10 +37,16 @@ class IronGolem extends Animal {
 		parent::initEntity();
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName(){
 		return "Iron Golem";
 	}
 
+	/**
+	 * @param Player $player
+	 */
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
 		$pk->eid = $this->getId();
@@ -59,6 +65,9 @@ class IronGolem extends Animal {
 		parent::spawnTo($player);
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getDrops(){
 		//Not affected by Looting.
 		$drops = array(ItemItem::get(ItemItem::IRON_INGOT, 0, mt_rand(3, 5)));

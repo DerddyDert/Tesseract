@@ -27,14 +27,25 @@ use pocketmine\item\Item;
 class DaylightDetector extends Solid {
 	protected $id = self::DAYLIGHT_SENSOR;
 
+	/**
+	 * DaylightDetector constructor.
+	 *
+	 * @param int $meta
+	 */
 	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		return "Daylight Sensor";
 	}
 
+	/**
+	 * @return \pocketmine\math\AxisAlignedBB
+	 */
 	public function getBoundingBox(){
 		if($this->boundingBox === null){
 			$this->boundingBox = $this->recalculateBoundingBox();
@@ -43,22 +54,39 @@ class DaylightDetector extends Solid {
 		return $this->boundingBox;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function canBeFlowedInto(){
 		return false;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function canBeActivated() : bool{
 		return true;
 	}
 
+	/**
+	 * @return float
+	 */
 	public function getHardness(){
 		return 0.2;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getResistance(){
 		return 1;
 	}
 
+	/**
+	 * @param Item $item
+	 *
+	 * @return array
+	 */
 	public function getDrops(Item $item) : array{
 		return [
 			[self::DAYLIGHT_SENSOR, 0, 1]

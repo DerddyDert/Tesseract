@@ -37,6 +37,14 @@ class RCONInstance extends Thread {
 	/** @var MainLogger */
 	private $logger;
 
+	/**
+	 * RCONInstance constructor.
+	 *
+	 * @param     $logger
+	 * @param     $socket
+	 * @param     $password
+	 * @param int $maxClients
+	 */
 	public function __construct($logger, $socket, $password, $maxClients = 50){
 		$this->logger = $logger;
 		$this->stop = false;
@@ -54,6 +62,9 @@ class RCONInstance extends Thread {
 		$this->start();
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function isWaiting(){
 		return $this->waiting === true;
 	}
@@ -182,6 +193,15 @@ class RCONInstance extends Thread {
 		exit(0);
 	}
 
+	/**
+	 * @param $client
+	 * @param $size
+	 * @param $requestID
+	 * @param $packetType
+	 * @param $payload
+	 *
+	 * @return bool|null
+	 */
 	private function readPacket($client, &$size, &$requestID, &$packetType, &$payload){
 		socket_set_nonblock($client);
 		$d = @socket_read($client, 4);
@@ -204,6 +224,14 @@ class RCONInstance extends Thread {
 		return true;
 	}
 
+	/**
+	 * @param $client
+	 * @param $requestID
+	 * @param $packetType
+	 * @param $payload
+	 *
+	 * @return int
+	 */
 	private function writePacket($client, $requestID, $packetType, $payload){
 		$pk = Binary::writeLInt((int) $requestID)
 			. Binary::writeLInt((int) $packetType)
@@ -213,6 +241,9 @@ class RCONInstance extends Thread {
 		return socket_write($client, Binary::writeLInt(strlen($pk)) . $pk);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getThreadName(){
 		return "RCON";
 	}

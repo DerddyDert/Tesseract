@@ -38,15 +38,30 @@ class LeashKnot extends Entity {
 	protected $drag = 0.02;
 	private $dropItem = true;
 
+	/**
+	 * LeashKnot constructor.
+	 *
+	 * @param Level       $level
+	 * @param CompoundTag $nbt
+	 * @param bool        $dropItem
+	 */
 	public function __construct(Level $level, CompoundTag $nbt, bool $dropItem = true){
 		parent::__construct($level, $nbt);
 		$this->dropItem = $dropItem;
 	}
 
+	/**
+	 * @param Entity $entity
+	 *
+	 * @return bool
+	 */
 	public function canCollideWith(Entity $entity){
 		return false;
 	}
 
+	/**
+	 * @param Player $player
+	 */
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
 		$pk->type = LeashKnot::NETWORK_ID;

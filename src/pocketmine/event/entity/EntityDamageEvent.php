@@ -322,6 +322,9 @@ class EntityDamageEvent extends EntityEvent implements Cancellable {
 		}
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getThornsDamage(){
 		return $this->thornsDamage;
 	}

@@ -33,12 +33,22 @@ class NoteblockSound extends GenericSound {
 	protected $instrument;
 	protected $pitch;
 
+	/**
+	 * NoteblockSound constructor.
+	 *
+	 * @param Vector3 $pos
+	 * @param int     $instrument
+	 * @param int     $pitch
+	 */
 	public function __construct(Vector3 $pos, $instrument = self::INSTRUMENT_PIANO, $pitch = 0){
 		parent::__construct($pos, $instrument, $pitch);
 		$this->instrument = $instrument;
 		$this->pitch = $pitch;
 	}
 
+	/**
+	 * @return BlockEventPacket
+	 */
 	public function encode(){
 		$pk = new BlockEventPacket();
 		$pk->x = $this->x;

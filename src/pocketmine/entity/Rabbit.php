@@ -51,6 +51,12 @@ class Rabbit extends Animal {
 
 	public $dropExp = [1, 3];
 
+	/**
+	 * Rabbit constructor.
+	 *
+	 * @param Level       $level
+	 * @param CompoundTag $nbt
+	 */
 	public function __construct(Level $level, CompoundTag $nbt){
 		if(!isset($nbt->RabbitType)){
 			$nbt->RabbitType = new ByteTag("RabbitType", $this->getRandomRabbitType());
@@ -60,12 +66,18 @@ class Rabbit extends Animal {
 		$this->setDataProperty(self::DATA_RABBIT_TYPE, self::DATA_TYPE_BYTE, $this->getRabbitType());
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getRandomRabbitType() : int{
 		$arr = [0, 1, 2, 3, 4, 5, 99];
 
 		return $arr[mt_rand(0, count($arr) - 1)];
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getRabbitType() : int{
 		return (int) $this->namedtag["RabbitType"];
 	}
@@ -75,14 +87,23 @@ class Rabbit extends Animal {
 		parent::initEntity();
 	}
 
+	/**
+	 * @param int $type
+	 */
 	public function setRabbitType(int $type){
 		$this->namedtag->RabbitType = new ByteTag("RabbitType", $type);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		return "Rabbit";
 	}
 
+	/**
+	 * @param Player $player
+	 */
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
 		$pk->eid = $this->getId();
@@ -101,6 +122,9 @@ class Rabbit extends Animal {
 		parent::spawnTo($player);
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getDrops(){
 		$lootingL = 0;
 		$cause = $this->lastDamageCause;

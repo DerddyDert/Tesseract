@@ -40,12 +40,18 @@ class PolarBear extends Monster {
 
 	public $dropExp = [5, 5];
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		$this->setMaxHealth(30);
 
 		return "Polar Bear";
 	}
 
+	/**
+	 * @param Player $player
+	 */
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
 		$pk->eid = $this->getId();
@@ -64,6 +70,9 @@ class PolarBear extends Monster {
 		parent::spawnTo($player);
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getDrops(){
 		$cause = $this->lastDamageCause;
 		$drops = [];

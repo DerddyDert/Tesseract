@@ -34,10 +34,16 @@ class Spider extends Monster {
 
 	public $dropExp = [5, 5];
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		return "Spider";
 	}
 
+	/**
+	 * @param Player $player
+	 */
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
 		$pk->eid = $this->getId();
@@ -57,6 +63,9 @@ class Spider extends Monster {
 		parent::spawnTo($player);
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getDrops(){
 		$drops = array(ItemItem::get(ItemItem::STRING, 0, 1));
 		if($this->lastDamageCause instanceof EntityDamageByEntityEvent and $this->lastDamageCause->getEntity() instanceof Player){

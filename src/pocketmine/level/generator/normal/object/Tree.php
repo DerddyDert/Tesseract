@@ -44,6 +44,15 @@ abstract class Tree extends Object {
 	public $treeHeight = 7;
 	public $leafType = 0;
 
+	/**
+	 * @param ChunkManager $level
+	 * @param              $x
+	 * @param              $y
+	 * @param              $z
+	 * @param Random       $random
+	 * @param int          $type
+	 * @param bool         $noBigTree
+	 */
 	public static function growTree(ChunkManager $level, $x, $y, $z, Random $random, $type = 0, bool $noBigTree = true){
 		switch($type){
 			case Sapling::SPRUCE:
@@ -80,6 +89,15 @@ abstract class Tree extends Object {
 	}
 
 
+	/**
+	 * @param ChunkManager $level
+	 * @param              $x
+	 * @param              $y
+	 * @param              $z
+	 * @param Random       $random
+	 *
+	 * @return bool
+	 */
 	public function canPlaceObject(ChunkManager $level, $x, $y, $z, Random $random){
 		$radiusToCheck = 0;
 		for($yy = 0; $yy < $this->treeHeight + 3; ++$yy){
@@ -98,6 +116,13 @@ abstract class Tree extends Object {
 		return true;
 	}
 
+	/**
+	 * @param ChunkManager $level
+	 * @param              $x
+	 * @param              $y
+	 * @param              $z
+	 * @param Random       $random
+	 */
 	public function placeObject(ChunkManager $level, $x, $y, $z, Random $random){
 
 		$this->placeTrunk($level, $x, $y, $z, $random, $this->treeHeight - 1);
@@ -121,6 +146,14 @@ abstract class Tree extends Object {
 		}
 	}
 
+	/**
+	 * @param ChunkManager $level
+	 * @param              $x
+	 * @param              $y
+	 * @param              $z
+	 * @param Random       $random
+	 * @param              $trunkHeight
+	 */
 	protected function placeTrunk(ChunkManager $level, $x, $y, $z, Random $random, $trunkHeight){
 		// The base dirt block
 		$level->setBlockIdAt($x, $y - 1, $z, Block::DIRT);

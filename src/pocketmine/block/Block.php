@@ -337,6 +337,9 @@ class Block extends Position implements BlockIds, Metadatable {
 		}
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function isSolid(){
 		return true;
 	}
@@ -391,6 +394,9 @@ class Block extends Position implements BlockIds, Metadatable {
 		return true;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function tickRate() : int{
 		return 10;
 	}
@@ -443,6 +449,9 @@ class Block extends Position implements BlockIds, Metadatable {
 		return 0;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function isTopFacingSurfaceSolid(){
 		if($this->isSolid()){
 			return true;
@@ -466,6 +475,9 @@ class Block extends Position implements BlockIds, Metadatable {
 		return $this->meta;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function canNeighborBurn(){
 		for($face = 0; $face < 5; $face++){
 			if($this->getSide($face)->getBurnChance() > 0){
@@ -539,6 +551,9 @@ class Block extends Position implements BlockIds, Metadatable {
 		return 0.6;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function isPlaceable(){
 		return $this->canBePlaced();
 	}
@@ -579,26 +594,47 @@ class Block extends Position implements BlockIds, Metadatable {
 		return false;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function activate(){
 		return false;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function deactivate(){
 		return false;
 	}
 
+	/**
+	 * @param Block|null $from
+	 *
+	 * @return bool
+	 */
 	public function isActivated(Block $from = null){
 		return false;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function hasEntityCollision(){
 		return false;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function canPassThrough(){
 		return false;
 	}
 
+	/**
+	 * @param Entity  $entity
+	 * @param Vector3 $vector
+	 */
 	public function addVelocityToEntity(Entity $entity, Vector3 $vector){
 
 	}
@@ -693,6 +729,11 @@ class Block extends Position implements BlockIds, Metadatable {
 		return $base;
 	}
 
+	/**
+	 * @param Item $item
+	 *
+	 * @return bool
+	 */
 	public function canBeBrokenWith(Item $item){
 		return $this->getHardness() !== -1;
 	}
@@ -709,6 +750,10 @@ class Block extends Position implements BlockIds, Metadatable {
 	 */
 	public function __toString(){
 		return "Block[" . $this->getName() . "] (" . $this->getId() . ":" . $this->getDamage() . ")";
+	}
+
+	public function canClimb() : bool{
+		return false;
 	}
 
 	/**
@@ -851,12 +896,21 @@ class Block extends Position implements BlockIds, Metadatable {
 		return MovingObjectPosition::fromBlock($this->x, $this->y, $this->z, $f, $vector->add($this->x, $this->y, $this->z));
 	}
 
+	/**
+	 * @param string        $metadataKey
+	 * @param MetadataValue $metadataValue
+	 */
 	public function setMetadata($metadataKey, MetadataValue $metadataValue){
 		if($this->getLevel() instanceof Level){
 			$this->getLevel()->getBlockMetadata()->setMetadata($this, $metadataKey, $metadataValue);
 		}
 	}
 
+	/**
+	 * @param string $metadataKey
+	 *
+	 * @return null|MetadataValue[]|\WeakMap
+	 */
 	public function getMetadata($metadataKey){
 		if($this->getLevel() instanceof Level){
 			return $this->getLevel()->getBlockMetadata()->getMetadata($this, $metadataKey);
@@ -865,12 +919,19 @@ class Block extends Position implements BlockIds, Metadatable {
 		return null;
 	}
 
+	/**
+	 * @param string $metadataKey
+	 */
 	public function hasMetadata($metadataKey){
 		if($this->getLevel() instanceof Level){
 			$this->getLevel()->getBlockMetadata()->hasMetadata($this, $metadataKey);
 		}
 	}
 
+	/**
+	 * @param string $metadataKey
+	 * @param Plugin $plugin
+	 */
 	public function removeMetadata($metadataKey, Plugin $plugin){
 		if($this->getLevel() instanceof Level){
 			$this->getLevel()->getBlockMetadata()->removeMetadata($this, $metadataKey, $plugin);

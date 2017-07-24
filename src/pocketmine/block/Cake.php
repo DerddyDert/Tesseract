@@ -33,22 +33,48 @@ class Cake extends Transparent implements FoodSource {
 
 	protected $id = self::CAKE_BLOCK;
 
+	/**
+	 * Cake constructor.
+	 *
+	 * @param int $meta
+	 */
 	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function canBeActivated() : bool{
 		return true;
 	}
 
+	/**
+	 * @return float
+	 */
 	public function getHardness(){
 		return 0.5;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		return "Cake Block";
 	}
 
+	/**
+	 * @param Item        $item
+	 * @param Block       $block
+	 * @param Block       $target
+	 * @param int         $face
+	 * @param float       $fx
+	 * @param float       $fy
+	 * @param float       $fz
+	 * @param Player|null $player
+	 *
+	 * @return bool
+	 */
 	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
 		$down = $this->getSide(0);
 		if($down->getId() !== self::AIR){
@@ -60,6 +86,11 @@ class Cake extends Transparent implements FoodSource {
 		return false;
 	}
 
+	/**
+	 * @param int $type
+	 *
+	 * @return bool|int
+	 */
 	public function onUpdate($type){
 		if($type === Level::BLOCK_UPDATE_NORMAL){
 			if($this->getSide(0)->getId() === self::AIR){ //Replace with common break method
@@ -72,10 +103,21 @@ class Cake extends Transparent implements FoodSource {
 		return false;
 	}
 
+	/**
+	 * @param Item $item
+	 *
+	 * @return array
+	 */
 	public function getDrops(Item $item) : array{
 		return [];
 	}
 
+	/**
+	 * @param Item        $item
+	 * @param Player|null $player
+	 *
+	 * @return bool
+	 */
 	public function onActivate(Item $item, Player $player = null){
 		if($player instanceof Player and $player->getHealth() < $player->getMaxHealth()){
 			$ev = new EntityEatBlockEvent($player, $this);
@@ -90,14 +132,23 @@ class Cake extends Transparent implements FoodSource {
 		return false;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getFoodRestore() : int{
 		return 2;
 	}
 
+	/**
+	 * @return float
+	 */
 	public function getSaturationRestore() : float{
 		return 0.4;
 	}
 
+	/**
+	 * @return Air|Cake
+	 */
 	public function getResidue(){
 		$clone = clone $this;
 		$clone->meta++;
@@ -115,6 +166,9 @@ class Cake extends Transparent implements FoodSource {
 		return [];
 	}
 
+	/**
+	 * @return AxisAlignedBB
+	 */
 	protected function recalculateBoundingBox(){
 
 		$f = (1 + $this->getDamage() * 2) / 16;

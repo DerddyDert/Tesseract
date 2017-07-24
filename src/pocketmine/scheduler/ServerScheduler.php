@@ -49,6 +49,9 @@ class ServerScheduler {
 	/** @var int */
 	private $ids = 1;
 
+	/**
+	 * ServerScheduler constructor.
+	 */
 	public function __construct(){
 		$this->queue = new ReversePriorityQueue();
 		$this->asyncPool = new AsyncPool(Server::getInstance(), self::$WORKERS);
@@ -94,6 +97,11 @@ class ServerScheduler {
 		return $this->handle(new TaskHandler(get_class($task), $task, $this->nextId(), $delay, $period));
 	}
 
+	/**
+	 * @param TaskHandler $handler
+	 *
+	 * @return TaskHandler
+	 */
 	private function handle(TaskHandler $handler){
 		if($handler->isDelayed()){
 			$nextRun = $this->currentTick + $handler->getDelay();
@@ -142,10 +150,16 @@ class ServerScheduler {
 		$this->asyncPool->submitTaskToWorker($task, $worker);
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getAsyncTaskPoolSize(){
 		return $this->asyncPool->getSize();
 	}
 
+	/**
+	 * @param $newSize
+	 */
 	public function increaseAsyncTaskPoolSize($newSize){
 		$this->asyncPool->increaseSize($newSize);
 	}
@@ -258,6 +272,11 @@ class ServerScheduler {
 		$this->asyncPool->collectTasks();
 	}
 
+	/**
+	 * @param $currentTicks
+	 *
+	 * @return bool
+	 */
 	private function isReady($currentTicks){
 		return count($this->tasks) > 0 and $this->queue->current()->getNextRun() <= $currentTicks;
 	}

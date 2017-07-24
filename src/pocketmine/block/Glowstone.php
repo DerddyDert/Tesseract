@@ -29,26 +29,48 @@ class Glowstone extends Transparent {
 
 	protected $id = self::GLOWSTONE_BLOCK;
 
+	/**
+	 * Glowstone constructor.
+	 *
+	 * @param int $meta
+	 */
 	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		return "Glowstone";
 	}
 
+	/**
+	 * @return float
+	 */
 	public function getHardness(){
 		return 0.3;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getToolType(){
 		return Tool::TYPE_PICKAXE;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getLightLevel(){
 		return 15;
 	}
 
+	/**
+	 * @param Item $item
+	 *
+	 * @return array
+	 */
 	public function getDrops(Item $item) : array{
 		if($item->getEnchantmentLevel(Enchantment::TYPE_MINING_SILK_TOUCH) > 0){
 			return [

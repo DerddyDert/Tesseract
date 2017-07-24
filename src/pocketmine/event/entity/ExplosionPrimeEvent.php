@@ -47,10 +47,16 @@ class ExplosionPrimeEvent extends EntityEvent implements Cancellable {
 		$this->dropItem = $dropItem;
 	}
 
+	/**
+	 * @param bool $dropItem
+	 */
 	public function setDropItem(bool $dropItem){
 		$this->dropItem = $dropItem;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function dropItem() : bool{
 		return $this->dropItem;
 	}
@@ -62,6 +68,9 @@ class ExplosionPrimeEvent extends EntityEvent implements Cancellable {
 		return $this->force;
 	}
 
+	/**
+	 * @param $force
+	 */
 	public function setForce($force){
 		$this->force = (float) $force;
 	}

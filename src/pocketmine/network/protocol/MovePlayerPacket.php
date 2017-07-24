@@ -46,6 +46,9 @@ class MovePlayerPacket extends DataPacket {
 	public $int1 = 0;
 	public $int2 = 0;
 
+	/**
+	 * @return $this
+	 */
 	public function clean(){
 		$this->teleport = false;
 

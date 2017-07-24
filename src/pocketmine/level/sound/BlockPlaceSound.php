@@ -29,11 +29,19 @@ class BlockPlaceSound extends GenericSound {
 
 	protected $data;
 
+	/**
+	 * BlockPlaceSound constructor.
+	 *
+	 * @param Block $b
+	 */
 	public function __construct(Block $b){
 		parent::__construct($b, LevelSoundEventPacket::SOUND_PLACE);
 		$this->data = $b->getId();
 	}
 
+	/**
+	 * @return LevelEventPacket
+	 */
 	public function encode(){
 		$pk = new LevelEventPacket;
 		$pk->evid = $this->id;

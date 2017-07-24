@@ -33,6 +33,12 @@ class EntityEffectAddEvent extends EntityEvent implements Cancellable {
 	/** @var Effect */
 	protected $effect;
 
+	/**
+	 * EntityEffectAddEvent constructor.
+	 *
+	 * @param Entity $entity
+	 * @param Effect $effect
+	 */
 	public function __construct(Entity $entity, Effect $effect){
 		$this->entity = $entity;
 		$this->effect = $effect;
@@ -45,6 +51,9 @@ class EntityEffectAddEvent extends EntityEvent implements Cancellable {
 		return $this->effect;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName(){
 		return "EntityEffectAddEvent";
 	}

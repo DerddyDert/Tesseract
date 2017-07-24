@@ -53,10 +53,17 @@ class ElderGuardian extends WaterAnimal implements Ageable {
 		$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_ELDER, 1);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		return "Elder Guardian";
 	}
 
+	/**
+	 * @param float             $damage
+	 * @param EntityDamageEvent $source
+	 */
 	public function attack($damage, EntityDamageEvent $source){
 		parent::attack($damage, $source);
 		if($source->isCancelled()){
@@ -74,6 +81,11 @@ class ElderGuardian extends WaterAnimal implements Ageable {
 		}
 	}
 
+	/**
+	 * @param $currentTick
+	 *
+	 * @return bool
+	 */
 	public function onUpdate($currentTick){
 		if($this->closed !== false){
 			return false;
@@ -143,10 +155,16 @@ class ElderGuardian extends WaterAnimal implements Ageable {
 		return $hasUpdate or !$this->onGround or abs($this->motionX) > 0.00001 or abs($this->motionY) > 0.00001 or abs($this->motionZ) > 0.00001;
 	}
 
+	/**
+	 * @return Vector3
+	 */
 	private function generateRandomDirection(){
 		return new Vector3(mt_rand(-1000, 1000) / 1000, mt_rand(-500, 500) / 1000, mt_rand(-1000, 1000) / 1000);
 	}
 
+	/**
+	 * @param Player $player
+	 */
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
 		$pk->eid = $this->getId();
@@ -165,6 +183,9 @@ class ElderGuardian extends WaterAnimal implements Ageable {
 		parent::spawnTo($player);
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getDrops(){
 		$drops = array(ItemItem::get(ItemItem::PRISMARINE_SHARD, 0, mt_rand(1, 2)));
 		$drops[] = ItemItem::get(ItemItem::RAW_FISH, 0, mt_rand(0, 1));

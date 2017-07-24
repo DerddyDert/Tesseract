@@ -22,10 +22,22 @@ class EnderPearl extends Projectile {
 
 	private $hasTeleportedShooter = false;
 
+	/**
+	 * EnderPearl constructor.
+	 *
+	 * @param Level       $level
+	 * @param CompoundTag $nbt
+	 * @param Entity|null $shootingEntity
+	 */
 	public function __construct(Level $level, CompoundTag $nbt, Entity $shootingEntity = null){
 		parent::__construct($level, $nbt, $shootingEntity);
 	}
 
+	/**
+	 * @param $currentTick
+	 *
+	 * @return bool
+	 */
 	public function onUpdate($currentTick){
 		if($this->closed){
 			return false;
@@ -59,6 +71,9 @@ class EnderPearl extends Projectile {
 		}
 	}
 
+	/**
+	 * @param Player $player
+	 */
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
 		$pk->type = self::NETWORK_ID;

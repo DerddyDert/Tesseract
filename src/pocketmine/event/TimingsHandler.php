@@ -56,6 +56,9 @@ class TimingsHandler {
 		self::$HANDLERS[spl_object_hash($this)] = $this;
 	}
 
+	/**
+	 * @param $fp
+	 */
 	public static function printTimings($fp){
 		fwrite($fp, "Minecraft" . PHP_EOL);
 
@@ -108,6 +111,9 @@ class TimingsHandler {
 		$this->timingDepth = 0;
 	}
 
+	/**
+	 * @param bool $measure
+	 */
 	public static function tick($measure = true){
 		if(PluginManager::$useTimings){
 			if($measure){

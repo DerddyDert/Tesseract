@@ -47,6 +47,9 @@ class CraftingInventory extends BaseInventory {
 		parent::__construct($holder, $inventoryType);
 	}
 
+	/**
+	 * @return mixed
+	 */
 	public function getSize(){
 		return $this->getResultInventory()->getSize() + parent::getSize();
 	}

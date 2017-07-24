@@ -35,6 +35,12 @@ class EnderChestInventory extends ContainerInventory {
 
 	private $owner;
 
+	/**
+	 * EnderChestInventory constructor.
+	 *
+	 * @param Human $owner
+	 * @param null  $contents
+	 */
 	public function __construct(Human $owner, $contents = null){
 		$this->owner = $owner;
 		parent::__construct(new FakeBlockMenu($this, $owner), InventoryType::get(InventoryType::ENDER_CHEST));
@@ -50,20 +56,32 @@ class EnderChestInventory extends ContainerInventory {
 		}
 	}
 
+	/**
+	 * @return Human
+	 */
 	public function getOwner(){
 		return $this->owner;
 	}
 
+	/**
+	 * @param Position $pos
+	 */
 	public function openAt(Position $pos){
 		$this->getHolder()->setComponents($pos->x, $pos->y, $pos->z);
 		$this->getHolder()->setLevel($pos->getLevel());
 		$this->owner->addWindow($this);
 	}
 
+	/**
+	 * @return InventoryHolder
+	 */
 	public function getHolder(){
 		return $this->holder;
 	}
 
+	/**
+	 * @param Player $who
+	 */
 	public function onOpen(Player $who){
 		parent::onOpen($who);
 
@@ -80,6 +98,9 @@ class EnderChestInventory extends ContainerInventory {
 		}
 	}
 
+	/**
+	 * @param Player $who
+	 */
 	public function onClose(Player $who){
 		if(count($this->getViewers()) === 1){
 			$pk = new BlockEventPacket();

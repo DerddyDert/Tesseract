@@ -26,10 +26,16 @@ use pocketmine\item\Item;
 class UnpoweredRepeater extends PoweredRepeater {
 	protected $id = self::UNPOWERED_REPEATER_BLOCK;
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		return "Unpowered Repeater";
 	}
 
+	/**
+	 * @param Item $item
+	 */
 	public function onBreak(Item $item){
 		$this->getLevel()->setBlock($this, new Air(), true);
 	}

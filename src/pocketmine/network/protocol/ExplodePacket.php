@@ -34,6 +34,9 @@ class ExplodePacket extends DataPacket {
 	public $radius;
 	public $records = [];
 
+	/**
+	 * @return $this
+	 */
 	public function clean(){
 		$this->records = [];
 

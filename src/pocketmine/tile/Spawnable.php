@@ -29,6 +29,12 @@ use pocketmine\Player;
 
 abstract class Spawnable extends Tile {
 
+	/**
+	 * Spawnable constructor.
+	 *
+	 * @param Level       $level
+	 * @param CompoundTag $nbt
+	 */
 	public function __construct(Level $level, CompoundTag $nbt){
 		parent::__construct($level, $nbt);
 		$this->spawnToAll();
@@ -46,6 +52,11 @@ abstract class Spawnable extends Tile {
 		}
 	}
 
+	/**
+	 * @param Player $player
+	 *
+	 * @return bool
+	 */
 	public function spawnTo(Player $player){
 		if($this->closed){
 			return false;

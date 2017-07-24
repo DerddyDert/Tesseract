@@ -38,6 +38,11 @@ class CrashDump {
 	private $encodedData = null;
 	private $path;
 
+	/**
+	 * CrashDump constructor.
+	 *
+	 * @param Server $server
+	 */
 	public function __construct(Server $server){
 		$this->time = time();
 		$this->server = $server;
@@ -65,6 +70,9 @@ class CrashDump {
 		//$this->encodeData();
 	}
 
+	/**
+	 * @param string $line
+	 */
 	public function addLine($line = ""){
 		fwrite($this->fp, $line . PHP_EOL);
 	}
@@ -228,18 +236,30 @@ class CrashDump {
 		}
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getPath(){
 		return $this->path;
 	}
 
+	/**
+	 * @return null
+	 */
 	public function getEncodedData(){
 		return $this->encodedData;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getData(){
 		return $this->data;
 	}
 
+	/**
+	 * @param $str
+	 */
 	public function add($str){
 		fwrite($this->fp, $str);
 	}

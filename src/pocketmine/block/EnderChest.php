@@ -39,26 +39,55 @@ class EnderChest extends Transparent {
 
 	protected $id = self::ENDER_CHEST;
 
+	/**
+	 * EnderChest constructor.
+	 *
+	 * @param int $meta
+	 */
 	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function canBeActivated() : bool{
 		return true;
 	}
 
+	/**
+	 * @return float
+	 */
 	public function getHardness(){
 		return 22.5;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getToolType(){
 		return Tool::TYPE_PICKAXE;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		return "Ender Chest";
 	}
 
+	/**
+	 * @param Item        $item
+	 * @param Block       $block
+	 * @param Block       $target
+	 * @param int         $face
+	 * @param float       $fx
+	 * @param float       $fy
+	 * @param float       $fz
+	 * @param Player|null $player
+	 *
+	 * @return bool
+	 */
 	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
 		$faces = [
 			0 => 4,
@@ -88,12 +117,23 @@ class EnderChest extends Transparent {
 		return true;
 	}
 
+	/**
+	 * @param Item $item
+	 *
+	 * @return bool
+	 */
 	public function onBreak(Item $item){
 		$this->getLevel()->setBlock($this, new Air(), true, true);
 
 		return true;
 	}
 
+	/**
+	 * @param Item        $item
+	 * @param Player|null $player
+	 *
+	 * @return bool
+	 */
 	public function onActivate(Item $item, Player $player = null){
 		if($player instanceof Player){
 			$top = $this->getSide(1);
@@ -121,12 +161,20 @@ class EnderChest extends Transparent {
 		return true;
 	}
 
+	/**
+	 * @param Item $item
+	 *
+	 * @return array
+	 */
 	public function getDrops(Item $item) : array{
 		return [
 			[Item::OBSIDIAN, 0, 8],
 		];
 	}
 
+	/**
+	 * @return AxisAlignedBB
+	 */
 	protected function recalculateBoundingBox(){
 		return new AxisAlignedBB(
 			$this->x + 0.0625,

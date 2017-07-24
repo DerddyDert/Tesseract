@@ -45,18 +45,34 @@ class PrimedTNT extends Entity implements Explosive {
 	protected $fuse;
 	private $dropItem = true;
 
+	/**
+	 * PrimedTNT constructor.
+	 *
+	 * @param Level       $level
+	 * @param CompoundTag $nbt
+	 * @param bool        $dropItem
+	 */
 	public function __construct(Level $level, CompoundTag $nbt, bool $dropItem = true){
 		parent::__construct($level, $nbt);
 		$this->dropItem = $dropItem;
 	}
 
 
+	/**
+	 * @param float             $damage
+	 * @param EntityDamageEvent $source
+	 */
 	public function attack($damage, EntityDamageEvent $source){
 		if($source->getCause() === EntityDamageEvent::CAUSE_VOID){
 			parent::attack($damage, $source);
 		}
 	}
 
+	/**
+	 * @param Entity $entity
+	 *
+	 * @return bool
+	 */
 	public function canCollideWith(Entity $entity){
 		return false;
 	}
@@ -66,6 +82,11 @@ class PrimedTNT extends Entity implements Explosive {
 		$this->namedtag->Fuse = new ByteTag("Fuse", $this->fuse);
 	}
 
+	/**
+	 * @param $currentTick
+	 *
+	 * @return bool
+	 */
 	public function onUpdate($currentTick){
 
 		if($this->closed){
@@ -132,6 +153,9 @@ class PrimedTNT extends Entity implements Explosive {
 		}
 	}
 
+	/**
+	 * @param Player $player
+	 */
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
 		$pk->type = PrimedTNT::NETWORK_ID;

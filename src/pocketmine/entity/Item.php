@@ -46,6 +46,10 @@ class Item extends Entity {
 	protected $drag = 0.02;
 	protected $baseOffset = 0.125;
 
+	/**
+	 * @param float             $damage
+	 * @param EntityDamageEvent $source
+	 */
 	public function attack($damage, EntityDamageEvent $source){
 		if(
 			$source->getCause() === EntityDamageEvent::CAUSE_VOID or
@@ -57,6 +61,11 @@ class Item extends Entity {
 		}
 	}
 
+	/**
+	 * @param $currentTick
+	 *
+	 * @return bool
+	 */
 	public function onUpdate($currentTick){
 		if($this->closed){
 			return false;
@@ -140,6 +149,11 @@ class Item extends Entity {
 		}
 	}
 
+	/**
+	 * @param Entity $entity
+	 *
+	 * @return bool
+	 */
 	public function canCollideWith(Entity $entity){
 		return false;
 	}
@@ -186,6 +200,9 @@ class Item extends Entity {
 		$this->thrower = $thrower;
 	}
 
+	/**
+	 * @param Player $player
+	 */
 	public function spawnTo(Player $player){
 		$pk = new AddItemEntityPacket();
 		$pk->eid = $this->getId();

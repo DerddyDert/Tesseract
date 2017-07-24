@@ -144,6 +144,12 @@ class LoginPacket extends DataPacket {
 		}
 	}
 
+	/**
+	 * @param $token
+	 * @param $key
+	 *
+	 * @return array
+	 */
 	public function decodeToken($token, $key){
 		$tokens = explode(".", $token);
 		list($headB64, $payloadB64, $sigB64) = $tokens;

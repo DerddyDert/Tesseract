@@ -44,6 +44,12 @@ class Beacon extends Spawnable implements Nameable, InventoryHolder {
 
 	private $inventory;
 
+	/**
+	 * Beacon constructor.
+	 *
+	 * @param Level       $level
+	 * @param CompoundTag $nbt
+	 */
 	public function __construct(Level $level, CompoundTag $nbt){
 		if(!isset($nbt->primary)){
 			$nbt->primary = new IntTag("primary", 0);
@@ -60,6 +66,9 @@ class Beacon extends Spawnable implements Nameable, InventoryHolder {
 		parent::saveNBT();
 	}
 
+	/**
+	 * @return CompoundTag
+	 */
 	public function getSpawnCompound(){
 		$c = new CompoundTag("", [
 			new StringTag("id", Tile::BEACON),
@@ -77,14 +86,23 @@ class Beacon extends Spawnable implements Nameable, InventoryHolder {
 		return $c;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function hasName(){
 		return isset($this->namedtag->CustomName);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		return $this->hasName() ? $this->namedtag->CustomName->getValue() : "Beacon";
 	}
 
+	/**
+	 * @param void $str
+	 */
 	public function setName($str){
 		if($str === ""){
 			unset($this->namedtag->CustomName);
@@ -94,6 +112,12 @@ class Beacon extends Spawnable implements Nameable, InventoryHolder {
 		$this->namedtag->CustomName = new StringTag("CustomName", $str);
 	}
 
+	/**
+	 * @param CompoundTag $nbt
+	 * @param Player      $player
+	 *
+	 * @return bool
+	 */
 	public function updateCompoundTag(CompoundTag $nbt, Player $player) : bool{
 		$this->setPrimaryEffect($nbt->primary->getValue());
 		$this->setSecondaryEffect($nbt->secondary->getValue());
@@ -101,30 +125,55 @@ class Beacon extends Spawnable implements Nameable, InventoryHolder {
 		return true;
 	}
 
+	/**
+	 * @param int $effectId
+	 */
 	public function setPrimaryEffect(int $effectId){
 		$this->namedtag->primary->setValue($effectId);
 	}
 
+	/**
+	 * @param int $effectId
+	 */
 	public function setSecondaryEffect(int $effectId){
 		$this->namedtag->secondary->setValue($effectId);
 	}
 
+	/**
+	 * @param Item $item
+	 *
+	 * @return bool
+	 */
 	public function isPaymentItem(Item $item){
 		return in_array($item->getId(), [Item::DIAMOND, Item::IRON_INGOT, Item::GOLD_INGOT, Item::EMERALD]);
 	}
 
+	/**
+	 * @return mixed
+	 */
 	public function getPrimaryEffect(){
 		return $this->namedtag->primary->getValue();
 	}
 
+	/**
+	 * @return CompoundTag
+	 */
 	public function getBeaconData(){
 		return $this->namedtag;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function isSecondaryAvailable(){
 		return $this->isEffectAvailable(Effect::REGENERATION);//What a hack xD
 	}
 
+	/**
+	 * @param int $effectId
+	 *
+	 * @return bool
+	 */
 	public function isEffectAvailable(int $effectId){
 		switch($effectId){
 			case Effect::SPEED:
@@ -147,6 +196,9 @@ class Beacon extends Spawnable implements Nameable, InventoryHolder {
 		}
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getLayers(){
 		$layers = 0;
 		if($this->checkShape($this->getSide(0), 1)) $layers++;
@@ -163,6 +215,12 @@ class Beacon extends Spawnable implements Nameable, InventoryHolder {
 		return $layers;
 	}
 
+	/**
+	 * @param Vector3 $pos
+	 * @param int     $layer
+	 *
+	 * @return bool
+	 */
 	public function checkShape(Vector3 $pos, $layer = 1){
 		for($x = $pos->x - $layer; $x <= $pos->x + $layer; $x++)
 			for($z = $pos->z - $layer; $z <= $pos->z + $layer; $z++)
@@ -171,6 +229,9 @@ class Beacon extends Spawnable implements Nameable, InventoryHolder {
 		return true;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function solidAbove(){
 		if($this->y === $this->getLevel()->getHighestBlockAt($this->x, $this->z)) return false;
 		for($i = $this->y; $i < Level::Y_MAX; $i++){
@@ -178,10 +239,16 @@ class Beacon extends Spawnable implements Nameable, InventoryHolder {
 		}
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function isActive(){
 		return !empty($this->getEffects()) && $this->checkShape($this->getSide(0), 1);
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getEffects(){
 		return [$this->namedtag->primary->getValue(), $this->namedtag->secondary->getValue()];
 	}
@@ -189,9 +256,15 @@ class Beacon extends Spawnable implements Nameable, InventoryHolder {
 	public function getTierEffects(){
 	}
 
+	/**
+	 * @param int $tier
+	 */
 	public function getEffectTier(int $tier){
 	}
 
+	/**
+	 *
+	 */
 	public function onUpdate(){
 		if(!empty($this->getEffects())){
 			$this->applyEffects($this);
@@ -199,6 +272,9 @@ class Beacon extends Spawnable implements Nameable, InventoryHolder {
 		$this->getLevel()->getServer()->getScheduler()->scheduleDelayedTask(new BeaconDelayedCheckTask($this, $this->getLevel()->getId()), 20 * 4);//4 seconds
 	}
 
+	/**
+	 * @param Vector3 $pos
+	 */
 	public function applyEffects(Vector3 $pos){
 		//TODO: Apply stronger effects on secondary.
 		$layers = $this->getLayers();
@@ -214,10 +290,16 @@ class Beacon extends Spawnable implements Nameable, InventoryHolder {
 			}
 	}
 
+	/**
+	 * @return mixed
+	 */
 	public function getSecondaryEffect(){
 		return $this->namedtag->secondary->getValue();
 	}
 
+	/**
+	 * @return BeaconInventory
+	 */
 	public function getInventory(){
 		return $this->inventory;
 	}

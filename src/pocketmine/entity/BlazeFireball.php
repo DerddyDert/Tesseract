@@ -40,19 +40,38 @@ class BlazeFireball extends Projectile {
 	protected $isCritical;
 	protected $canExplode = false;
 
+	/**
+	 * BlazeFireball constructor.
+	 *
+	 * @param Level       $level
+	 * @param CompoundTag $nbt
+	 * @param Entity|null $shootingEntity
+	 * @param bool        $critical
+	 */
 	public function __construct(Level $level, CompoundTag $nbt, Entity $shootingEntity = null, bool $critical = false){
 		parent::__construct($level, $nbt, $shootingEntity);
 		$this->isCritical = $critical;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function isExplode() : bool{
 		return $this->canExplode;
 	}
 
+	/**
+	 * @param bool $bool
+	 */
 	public function setExplode(bool $bool){
 		$this->canExplode = $bool;
 	}
 
+	/**
+	 * @param $currentTick
+	 *
+	 * @return bool
+	 */
 	public function onUpdate($currentTick){
 		if($this->closed){
 			return false;
@@ -88,6 +107,9 @@ class BlazeFireball extends Projectile {
 		return $hasUpdate;
 	}
 
+	/**
+	 * @param Player $player
+	 */
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
 		$pk->eid = $this->getId();

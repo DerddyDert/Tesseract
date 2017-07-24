@@ -29,6 +29,12 @@ use pocketmine\utils\Random;
 class Ore extends Populator {
 	private $oreTypes = [];
 
+	/**
+	 * @param ChunkManager $level
+	 * @param              $chunkX
+	 * @param              $chunkZ
+	 * @param Random       $random
+	 */
 	public function populate(ChunkManager $level, $chunkX, $chunkZ, Random $random){
 		foreach($this->oreTypes as $type){
 			$ore = new ObjectOre($random, $type);
@@ -43,6 +49,9 @@ class Ore extends Populator {
 		}
 	}
 
+	/**
+	 * @param array $types
+	 */
 	public function setOreTypes(array $types){
 		$this->oreTypes = $types;
 	}

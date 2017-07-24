@@ -58,10 +58,16 @@ class BaseTransaction implements Transaction {
 		$this->achievements = $achievements;
 	}
 
+	/**
+	 * @return float|mixed
+	 */
 	public function getCreationTime(){
 		return $this->creationTime;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getFailures(){
 		return $this->failures;
 	}
@@ -70,26 +76,44 @@ class BaseTransaction implements Transaction {
 		$this->failures++;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function succeeded(){
 		return $this->wasSuccessful;
 	}
 
+	/**
+	 * @param bool $value
+	 */
 	public function setSuccess($value = true){
 		$this->wasSuccessful = $value;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getTransactionType(){
 		return $this->transactionType;
 	}
 
+	/**
+	 * @return array|string|\string[]
+	 */
 	public function getAchievements(){
 		return $this->achievements;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function hasAchievements(){
 		return count($this->achievements) !== 0;
 	}
 
+	/**
+	 * @param string $achievementName
+	 */
 	public function addAchievement(string $achievementName){
 		$this->achievements[] = $achievementName;
 	}
@@ -116,6 +140,9 @@ class BaseTransaction implements Transaction {
 		$this->inventory->sendSlot($this->slot, $targets);
 	}
 
+	/**
+	 * @return Inventory
+	 */
 	public function getInventory(){
 		return $this->inventory;
 	}
@@ -190,14 +217,23 @@ class BaseTransaction implements Transaction {
 		}
 	}
 
+	/**
+	 * @return Item
+	 */
 	public function getTargetItem(){
 		return clone $this->targetItem;
 	}
 
+	/**
+	 * @param Item $item
+	 */
 	public function setTargetItem(Item $item){
 		$this->targetItem = clone $item;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getSlot(){
 		return $this->slot;
 	}

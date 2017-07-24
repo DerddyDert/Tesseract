@@ -35,10 +35,19 @@ class EnderCrystal extends Vehicle {
 	public $gravity = 0.5;
 	public $drag = 0.1;
 
+	/**
+	 * EnderCrystal constructor.
+	 *
+	 * @param Level       $level
+	 * @param CompoundTag $nbt
+	 */
 	public function __construct(Level $level, CompoundTag $nbt){
 		parent::__construct($level, $nbt);
 	}
 
+	/**
+	 * @param Player $player
+	 */
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
 		$pk->eid = $this->getId();

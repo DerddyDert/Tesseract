@@ -30,6 +30,12 @@ class GroundFire extends VariableAmountPopulator {
 	/** @var ChunkManager */
 	private $level;
 
+	/**
+	 * @param ChunkManager $level
+	 * @param              $chunkX
+	 * @param              $chunkZ
+	 * @param Random       $random
+	 */
 	public function populate(ChunkManager $level, $chunkX, $chunkZ, Random $random){
 		$this->level = $level;
 		$amount = $this->getAmount($random);
@@ -44,6 +50,12 @@ class GroundFire extends VariableAmountPopulator {
 		}
 	}
 
+	/**
+	 * @param $x
+	 * @param $z
+	 *
+	 * @return int
+	 */
 	private function getHighestWorkableBlock($x, $z){
 		for($y = 0; $y <= 127; ++$y){
 			$b = $this->level->getBlockIdAt($x, $y, $z);
@@ -55,6 +67,13 @@ class GroundFire extends VariableAmountPopulator {
 		return $y === 0 ? -1 : $y;
 	}
 
+	/**
+	 * @param $x
+	 * @param $y
+	 * @param $z
+	 *
+	 * @return bool
+	 */
 	private function canGroundFireStay($x, $y, $z){
 		$b = $this->level->getBlockIdAt($x, $y, $z);
 

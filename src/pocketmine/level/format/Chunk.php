@@ -166,6 +166,12 @@ class Chunk {
 		return $chunk;
 	}
 
+	/**
+	 * @param int $x
+	 * @param int $z
+	 *
+	 * @return Chunk
+	 */
 	public static function getEmptyChunk(int $x, int $z) : Chunk{
 		return new Chunk($x, $z);
 	}
@@ -177,6 +183,9 @@ class Chunk {
 		return $this->x;
 	}
 
+	/**
+	 * @param int $x
+	 */
 	public function setX(int $x){
 		$this->x = $x;
 	}

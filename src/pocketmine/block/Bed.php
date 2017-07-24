@@ -33,22 +33,42 @@ class Bed extends Transparent {
 
 	protected $id = self::BED_BLOCK;
 
+	/**
+	 * Bed constructor.
+	 *
+	 * @param int $meta
+	 */
 	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function canBeActivated() : bool{
 		return true;
 	}
 
+	/**
+	 * @return float
+	 */
 	public function getHardness(){
 		return 0.2;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		return "Bed Block";
 	}
 
+	/**
+	 * @param Item        $item
+	 * @param Player|null $player
+	 *
+	 * @return bool
+	 */
 	public function onActivate(Item $item, Player $player = null){
 		if($this->getLevel()->getDimension() == Level::DIMENSION_NETHER){
 			$explosion = new Explosion($this, 6, $this);
@@ -98,6 +118,18 @@ class Bed extends Transparent {
 		return true;
 	}
 
+	/**
+	 * @param Item        $item
+	 * @param Block       $block
+	 * @param Block       $target
+	 * @param int         $face
+	 * @param float       $fx
+	 * @param float       $fy
+	 * @param float       $fz
+	 * @param Player|null $player
+	 *
+	 * @return bool
+	 */
 	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
 		$down = $this->getSide(0);
 		if($down->isTransparent() === false){
@@ -122,6 +154,11 @@ class Bed extends Transparent {
 		return false;
 	}
 
+	/**
+	 * @param Item $item
+	 *
+	 * @return bool
+	 */
 	public function onBreak(Item $item){
 		$sides = [
 			0 => 3,
@@ -150,12 +187,20 @@ class Bed extends Transparent {
 		return true;
 	}
 
+	/**
+	 * @param Item $item
+	 *
+	 * @return array
+	 */
 	public function getDrops(Item $item) : array{
 		return [
 			[Item::BED, 0, 1],
 		];
 	}
 
+	/**
+	 * @return AxisAlignedBB
+	 */
 	protected function recalculateBoundingBox(){
 		return new AxisAlignedBB(
 			$this->x,

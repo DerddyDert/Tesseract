@@ -207,6 +207,11 @@ interface Inventory {
 	 */
 	public function open(Player $who);
 
+	/**
+	 * @param Player $who
+	 *
+	 * @return mixed
+	 */
 	public function close(Player $who);
 
 	/**

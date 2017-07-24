@@ -32,6 +32,12 @@ class FlintSteel extends Tool {
 	/** @var Vector3 */
 	private $temporalVector = null;
 
+	/**
+	 * FlintSteel constructor.
+	 *
+	 * @param int $meta
+	 * @param int $count
+	 */
 	public function __construct($meta = 0, $count = 1){
 		parent::__construct(self::FLINT_STEEL, $meta, $count, "Flint and Steel");
 		if($this->temporalVector === null){
@@ -39,10 +45,25 @@ class FlintSteel extends Tool {
 		}
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function canBeActivated() : bool{
 		return true;
 	}
 
+	/**
+	 * @param Level  $level
+	 * @param Player $player
+	 * @param Block  $block
+	 * @param Block  $target
+	 * @param        $face
+	 * @param        $fx
+	 * @param        $fy
+	 * @param        $fz
+	 *
+	 * @return bool
+	 */
 	public function onActivate(Level $level, Player $player, Block $block, Block $target, $face, $fx, $fy, $fz){
 		if($target->getId() === Block::OBSIDIAN and $player->getServer()->netherEnabled){
 			$tx = $target->getX();
@@ -134,12 +155,6 @@ class FlintSteel extends Tool {
 
 		if($block->getId() === self::AIR and ($target instanceof Solid)){
 			$level->setBlock($block, new Fire(), true);
-
-			/** @var Fire $block */
-			$block = $level->getBlock($block);
-			if($block->getSide(Vector3::SIDE_DOWN)->isTopFacingSurfaceSolid() or $block->canNeighborBurn()){
-				$level->scheduleUpdate($block, $block->getTickRate() + mt_rand(0, 10));
-			}
 
 			if($player->isSurvival()){
 				$this->useOn($block, 2);

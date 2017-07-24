@@ -36,26 +36,49 @@ class Hopper extends Transparent {
 
 	protected $id = self::HOPPER_BLOCK;
 
+	/**
+	 * Hopper constructor.
+	 *
+	 * @param int $meta
+	 */
 	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function canBeActivated() : bool{
 		return true;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getToolType(){
 		return Tool::TYPE_PICKAXE;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		return "Hopper";
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getHardness(){
 		return 3;
 	}
 
+	/**
+	 * @param Item        $item
+	 * @param Player|null $player
+	 *
+	 * @return bool
+	 */
 	public function onActivate(Item $item, Player $player = null){
 		if($player instanceof Player){
 			$t = $this->getLevel()->getTile($this);
@@ -72,6 +95,18 @@ class Hopper extends Transparent {
 		return true;
 	}
 
+	/**
+	 * @param Item        $item
+	 * @param Block       $block
+	 * @param Block       $target
+	 * @param int         $face
+	 * @param float       $fx
+	 * @param float       $fy
+	 * @param float       $fz
+	 * @param Player|null $player
+	 *
+	 * @return bool
+	 */
 	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
 		$faces = [
 			0 => 0,
@@ -108,6 +143,11 @@ class Hopper extends Transparent {
 		return true;
 	}
 
+	/**
+	 * @param Item $item
+	 *
+	 * @return array
+	 */
 	public function getDrops(Item $item) : array{
 		if($item->isPickaxe() >= 1){
 			return [

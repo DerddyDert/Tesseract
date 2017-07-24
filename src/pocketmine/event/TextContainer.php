@@ -26,6 +26,11 @@ class TextContainer {
 	/** @var string $text */
 	protected $text;
 
+	/**
+	 * TextContainer constructor.
+	 *
+	 * @param $text
+	 */
 	public function __construct($text){
 		$this->text = $text;
 	}
@@ -44,6 +49,9 @@ class TextContainer {
 		return $this->text;
 	}
 
+	/**
+	 * @param $text
+	 */
 	public function setText($text){
 		$this->text = $text;
 	}

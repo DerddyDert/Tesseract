@@ -39,10 +39,16 @@ abstract class Armor extends Item {
 	const TYPE_LEGGINGS = 2;
 	const TYPE_BOOTS = 3;
 
+	/**
+	 * @return int
+	 */
 	public function getMaxStackSize() : int{
 		return 1;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function isArmor(){
 		return true;
 	}
@@ -76,16 +82,25 @@ abstract class Armor extends Item {
 		return true;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function isUnbreakable(){
 		$tag = $this->getNamedTagEntry("Unbreakable");
 
 		return $tag !== null and $tag->getValue() > 0;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function getMaxDurability(){
 		return false;
 	}
 
+	/**
+	 * @param Color $color
+	 */
 	public function setCustomColor(Color $color){
 		if(($hasTag = $this->hasCompoundTag())){
 			$tag = $this->getNamedTag();
@@ -96,6 +111,9 @@ abstract class Armor extends Item {
 		$this->setCompoundTag($tag);
 	}
 
+	/**
+	 * @return mixed|null
+	 */
 	public function getCustomColor(){
 		if(!$this->hasCompoundTag()) return null;
 		$tag = $this->getNamedTag();
@@ -115,30 +133,51 @@ abstract class Armor extends Item {
 		$this->setCompoundTag($tag);
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function getArmorTier(){
 		return false;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function getArmorType(){
 		return false;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function getArmorValue(){
 		return false;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function isHelmet(){
 		return false;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function isChestplate(){
 		return false;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function isLeggings(){
 		return false;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function isBoots(){
 		return false;
 	}

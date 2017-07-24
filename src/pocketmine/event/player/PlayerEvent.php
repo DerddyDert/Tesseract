@@ -32,6 +32,9 @@ abstract class PlayerEvent extends Event {
 	/** @var \pocketmine\Player */
 	protected $player;
 
+	/**
+	 * @return \pocketmine\Player
+	 */
 	public function getPlayer(){
 		return $this->player;
 	}

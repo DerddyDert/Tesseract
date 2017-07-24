@@ -29,22 +29,41 @@ class Ice extends Transparent {
 
 	protected $id = self::ICE;
 
+	/**
+	 * Ice constructor.
+	 *
+	 * @param int $meta
+	 */
 	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		return "Ice";
 	}
 
+	/**
+	 * @return float
+	 */
 	public function getHardness(){
 		return 0.5;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getToolType(){
 		return Tool::TYPE_PICKAXE;
 	}
 
+	/**
+	 * @param Item $item
+	 *
+	 * @return bool
+	 */
 	public function onBreak(Item $item){
 		if($item->getEnchantmentLevel(Enchantment::TYPE_MINING_SILK_TOUCH) === 0){
 			$this->getLevel()->setBlock($this, new Water(), true);
@@ -53,6 +72,11 @@ class Ice extends Transparent {
 		return true;
 	}
 
+	/**
+	 * @param Item $item
+	 *
+	 * @return array
+	 */
 	public function getDrops(Item $item) : array{
 		if($item->getEnchantmentLevel(Enchantment::TYPE_MINING_SILK_TOUCH) > 0){
 			return [

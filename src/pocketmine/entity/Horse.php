@@ -31,10 +31,16 @@ class Horse extends Living {
 
 	const NETWORK_ID = 23;
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		return "Horse";
 	}
 
+	/**
+	 * @param $id
+	 */
 	public function setChestPlate($id){
 		/*	
 		416, 417, 418, 419 only
@@ -52,6 +58,9 @@ class Horse extends Living {
 		}
 	}
 
+	/**
+	 * @param Player $player
+	 */
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
 		$pk->eid = $this->getId();

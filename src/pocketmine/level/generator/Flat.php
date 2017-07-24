@@ -48,6 +48,11 @@ class Flat extends Generator {
 	private $populators = [];
 	private $structure, $chunks, $options, $floorLevel, $preset;
 
+	/**
+	 * Flat constructor.
+	 *
+	 * @param array $options
+	 */
 	public function __construct(array $options = []){
 		$this->preset = "2;7,2x3,2;1;";
 		$this->options = $options;
@@ -70,14 +75,24 @@ class Flat extends Generator {
 
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getSettings(){
 		return $this->options;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		return "flat";
 	}
 
+	/**
+	 * @param ChunkManager $level
+	 * @param Random       $random
+	 */
 	public function init(ChunkManager $level, Random $random){
 		$this->level = $level;
 		$this->random = $random;
@@ -92,6 +107,10 @@ class Flat extends Generator {
 		*/
 	}
 
+	/**
+	 * @param $chunkX
+	 * @param $chunkZ
+	 */
 	public function generateChunk($chunkX, $chunkZ){
 		if($this->chunk === null){
 			if(isset($this->options["preset"]) and $this->options["preset"] != ""){
@@ -106,6 +125,11 @@ class Flat extends Generator {
 		$this->level->setChunk($chunkX, $chunkZ, $chunk);
 	}
 
+	/**
+	 * @param $preset
+	 * @param $chunkX
+	 * @param $chunkZ
+	 */
 	protected function parsePreset($preset, $chunkX, $chunkZ){
 		$this->preset = $preset;
 		$preset = explode(";", $preset);
@@ -162,6 +186,10 @@ class Flat extends Generator {
 		}
 	}
 
+	/**
+	 * @param $chunkX
+	 * @param $chunkZ
+	 */
 	public function populateChunk($chunkX, $chunkZ){
 		$this->random->setSeed(0xdeadbeef ^ ($chunkX << 8) ^ $chunkZ ^ $this->level->getSeed());
 		foreach($this->populators as $populator){
@@ -170,6 +198,9 @@ class Flat extends Generator {
 
 	}
 
+	/**
+	 * @return Vector3
+	 */
 	public function getSpawn(){
 		return new Vector3(128, $this->floorLevel, 128);
 	}

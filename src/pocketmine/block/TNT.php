@@ -35,22 +35,42 @@ class TNT extends Solid {
 
 	protected $id = self::TNT;
 
+	/**
+	 * TNT constructor.
+	 *
+	 * @param int $meta
+	 */
 	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName(){
 		return "TNT";
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getHardness(){
 		return 0;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function canBeActivated() : bool{
 		return true;
 	}
 
+	/**
+	 * @param Item        $item
+	 * @param Player|null $player
+	 *
+	 * @return bool
+	 */
 	public function onActivate(Item $item, Player $player = null){
 		if($item->getId() === Item::FLINT_STEEL || $item->getId() === Item::FIRE_CHARGE){
 			$item->useOn($this);

@@ -39,18 +39,41 @@ class SkullBlock extends Flowable {
 
 	protected $id = self::SKULL_BLOCK;
 
+	/**
+	 * SkullBlock constructor.
+	 *
+	 * @param int $meta
+	 */
 	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getHardness(){
 		return 1;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function getName() : bool{
 		return "Mob Head";
 	}
 
+	/**
+	 * @param Item        $item
+	 * @param Block       $block
+	 * @param Block       $target
+	 * @param int         $face
+	 * @param float       $fx
+	 * @param float       $fy
+	 * @param float       $fz
+	 * @param Player|null $player
+	 *
+	 * @return bool
+	 */
 	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
 		if($face !== 0){
 			$this->meta = $face;
@@ -84,6 +107,11 @@ class SkullBlock extends Flowable {
 		return false;
 	}
 
+	/**
+	 * @param Item $item
+	 *
+	 * @return array
+	 */
 	public function getDrops(Item $item) : array{
 		$tile = $this->level->getTile($this);
 		if($tile instanceof SkullTile){
@@ -95,6 +123,9 @@ class SkullBlock extends Flowable {
 		return [];
 	}
 
+	/**
+	 * @return AxisAlignedBB
+	 */
 	protected function recalculateBoundingBox(){
 		$x1 = 0;
 		$x2 = 0;

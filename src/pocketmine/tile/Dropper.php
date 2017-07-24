@@ -46,6 +46,12 @@ class Dropper extends Spawnable implements InventoryHolder, Container, Nameable 
 
 	protected $nextUpdate = 0;
 
+	/**
+	 * Dropper constructor.
+	 *
+	 * @param Level       $level
+	 * @param CompoundTag $nbt
+	 */
 	public function __construct(Level $level, CompoundTag $nbt){
 		parent::__construct($level, $nbt);
 		$this->inventory = new DropperInventory($this);
@@ -154,10 +160,16 @@ class Dropper extends Spawnable implements InventoryHolder, Container, Nameable 
 		return true;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		return isset($this->namedtag->CustomName) ? $this->namedtag->CustomName->getValue() : "Dropper";
 	}
 
+	/**
+	 * @param void $str
+	 */
 	public function setName($str){
 		if($str === ""){
 			unset($this->namedtag->CustomName);
@@ -238,6 +250,9 @@ class Dropper extends Spawnable implements InventoryHolder, Container, Nameable 
 		}
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getMotion(){
 		$meta = $this->getBlock()->getDamage();
 		switch($meta){
@@ -258,6 +273,9 @@ class Dropper extends Spawnable implements InventoryHolder, Container, Nameable 
 		}
 	}
 
+	/**
+	 * @return CompoundTag
+	 */
 	public function getSpawnCompound(){
 		$c = new CompoundTag("", [
 			new StringTag("id", Tile::DROPPER),
@@ -273,6 +291,9 @@ class Dropper extends Spawnable implements InventoryHolder, Container, Nameable 
 		return $c;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function hasName(){
 		return isset($this->namedtag->CustomName);
 	}

@@ -29,6 +29,9 @@ use pocketmine\level\generator\normal\populator\Tree;
 
 class TaigaBiome extends SnowyBiome {
 
+	/**
+	 * TaigaBiome constructor.
+	 */
 	public function __construct(){
 		parent::__construct();
 
@@ -56,6 +59,9 @@ class TaigaBiome extends SnowyBiome {
 		]);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		return "Taiga";
 	}

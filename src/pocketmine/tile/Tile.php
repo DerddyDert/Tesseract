@@ -73,6 +73,12 @@ abstract class Tile extends Position {
 	protected $server;
 	protected $timings;
 
+	/**
+	 * Tile constructor.
+	 *
+	 * @param Level       $level
+	 * @param CompoundTag $nbt
+	 */
 	public function __construct(Level $level, CompoundTag $nbt){
 		$this->timings = Timings::getTileEntityTimings($this);
 
@@ -148,6 +154,9 @@ abstract class Tile extends Position {
 		return null;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getId(){
 		return $this->id;
 	}
@@ -175,6 +184,9 @@ abstract class Tile extends Position {
 		return $this->level->getBlock($this);
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function onUpdate(){
 		return false;
 	}
@@ -201,6 +213,9 @@ abstract class Tile extends Position {
 		}
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		return $this->name;
 	}

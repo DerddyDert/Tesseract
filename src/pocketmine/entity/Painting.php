@@ -28,6 +28,12 @@ class Painting extends Hanging {
 		}else $this->close();
 	}
 
+	/**
+	 * @param float             $damage
+	 * @param EntityDamageEvent $source
+	 *
+	 * @return bool
+	 */
 	public function attack($damage, EntityDamageEvent $source){
 		parent::attack($damage, $source);
 		if($source->isCancelled()) return false;
@@ -35,6 +41,9 @@ class Painting extends Hanging {
 		$this->kill();
 	}
 
+	/**
+	 * @param Player $player
+	 */
 	public function spawnTo(Player $player){
 		$pk = new AddPaintingPacket();
 		$pk->eid = $this->getId();
@@ -48,6 +57,9 @@ class Painting extends Hanging {
 		parent::spawnTo($player);
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getDrops(){
 		return [ItemItem::get(ItemItem::PAINTING, 0, 1)];
 	}

@@ -128,10 +128,21 @@ class Potion extends Item {
 		self::DECAY => [Effect::WITHER, (40 * 20), 0]
 	];
 
+	/**
+	 * Potion constructor.
+	 *
+	 * @param int $meta
+	 * @param int $count
+	 */
 	public function __construct($meta = 0, $count = 1){
 		parent::__construct(self::POTION, $meta, $count, self::getNameByMeta($meta));
 	}
 
+	/**
+	 * @param int $meta
+	 *
+	 * @return string
+	 */
 	public static function getNameByMeta(int $meta) : string{
 		switch($meta){
 			case self::WATER_BOTTLE:
@@ -201,6 +212,11 @@ class Potion extends Item {
 		}
 	}
 
+	/**
+	 * @param int $meta
+	 *
+	 * @return array
+	 */
 	public static function getColor(int $meta){
 		$effect = Effect::getEffect(self::getEffectId($meta));
 		if($effect !== null){
@@ -210,6 +226,11 @@ class Potion extends Item {
 		return [0, 0, 0];
 	}
 
+	/**
+	 * @param int $meta
+	 *
+	 * @return int
+	 */
 	public static function getEffectId(int $meta) : int{
 		switch($meta){
 			case self::INVISIBILITY:
@@ -254,18 +275,32 @@ class Potion extends Item {
 		}
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getMaxStackSize() : int{
 		return 1;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function canBeConsumed() : bool{
 		return $this->meta > 0;
 	}
 
+	/**
+	 * @param Entity $entity
+	 *
+	 * @return bool
+	 */
 	public function canBeConsumedBy(Entity $entity) : bool{
 		return $entity instanceof Human;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getEffects() : array{
 		return self::getEffectsById($this->meta);
 	}
@@ -283,6 +318,9 @@ class Potion extends Item {
 		return [];
 	}
 
+	/**
+	 * @param Entity $human
+	 */
 	public function onConsume(Entity $human){
 		$pk = new EntityEventPacket();
 		$pk->eid = $human->getId();

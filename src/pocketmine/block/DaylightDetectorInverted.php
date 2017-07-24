@@ -24,6 +24,11 @@ namespace pocketmine\block;
 class DaylightDetectorInverted extends Solid {
 	protected $id = self::DAYLIGHT_SENSOR_INVERTED;
 
+	/**
+	 * DaylightDetectorInverted constructor.
+	 *
+	 * @param int $meta
+	 */
 	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}

@@ -28,6 +28,9 @@ use pocketmine\level\generator\normal\populator\SugarCane;
 
 class DesertBiome extends SandyBiome {
 
+	/**
+	 * DesertBiome constructor.
+	 */
 	public function __construct(){
 		$deadBush = new DeadBush();
 		$deadBush->setBaseAmount(1);
@@ -86,6 +89,9 @@ class DesertBiome extends SandyBiome {
 		]);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		return "Desert";
 	}

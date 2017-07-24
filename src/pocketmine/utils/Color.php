@@ -49,6 +49,13 @@ class Color {
 	private $green = 0;
 	private $blue = 0;
 
+	/**
+	 * Color constructor.
+	 *
+	 * @param $r
+	 * @param $g
+	 * @param $b
+	 */
 	public function __construct($r, $g, $b){
 		$this->red = $r;
 		$this->green = $g;
@@ -77,10 +84,22 @@ class Color {
 		}
 	}
 
+	/**
+	 * @param $r
+	 * @param $g
+	 * @param $b
+	 *
+	 * @return Color
+	 */
 	public static function getRGB($r, $g, $b){
 		return new Color((int) $r, (int) $g, (int) $b);
 	}
 
+	/**
+	 * @param Color[] ...$colors
+	 *
+	 * @return Color
+	 */
 	public static function averageColor(Color ...$colors){
 		$tr = 0;//total red
 		$tg = 0;//green
@@ -96,18 +115,32 @@ class Color {
 		return Color::getRGB($tr / $count, $tg / $count, $tb / $count);
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getRed(){
 		return (int) $this->red;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getGreen(){
 		return (int) $this->green;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getBlue(){
 		return (int) $this->blue;
 	}
 
+	/**
+	 * @param $id
+	 *
+	 * @return mixed|Color
+	 */
 	public static function getDyeColor($id){
 		if(isset(self::$dyeColors[$id])){
 			return clone self::$dyeColors[$id];
@@ -116,10 +149,16 @@ class Color {
 		return Color::getRGB(0, 0, 0);
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getColorCode(){
 		return ($this->red << 16 | $this->green << 8 | $this->blue) & 0xffffff;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function __toString(){
 		return "Color(red:" . $this->red . ", green:" . $this->green . ", blue:" . $this->blue . ")";
 	}

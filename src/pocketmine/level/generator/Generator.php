@@ -33,8 +33,19 @@ use pocketmine\utils\Random;
 abstract class Generator {
 	private static $list = [];
 
+	/**
+	 * Generator constructor.
+	 *
+	 * @param array $settings
+	 */
 	public abstract function __construct(array $settings = []);
 
+	/**
+	 * @param $object
+	 * @param $name
+	 *
+	 * @return bool
+	 */
 	public static function addGenerator($object, $name){
 		if(is_subclass_of($object, Generator::class) and !isset(Generator::$list[$name = strtolower($name)])){
 			Generator::$list[$name] = $object;
@@ -65,6 +76,11 @@ abstract class Generator {
 		return Normal::class;
 	}
 
+	/**
+	 * @param $class
+	 *
+	 * @return int|string
+	 */
 	public static function getGeneratorName($class){
 		foreach(Generator::$list as $name => $c){
 			if($c === $class){
@@ -243,14 +259,35 @@ abstract class Generator {
 		return $noiseArray;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getWaterHeight() : int{
 		return 0;
 	}
 
+	/**
+	 * @param ChunkManager $level
+	 * @param Random       $random
+	 *
+	 * @return mixed
+	 */
 	public abstract function init(ChunkManager $level, Random $random);
 
+	/**
+	 * @param $chunkX
+	 * @param $chunkZ
+	 *
+	 * @return mixed
+	 */
 	public abstract function generateChunk($chunkX, $chunkZ);
 
+	/**
+	 * @param $chunkX
+	 * @param $chunkZ
+	 *
+	 * @return mixed
+	 */
 	public abstract function populateChunk($chunkX, $chunkZ);
 
 	public abstract function getSettings();

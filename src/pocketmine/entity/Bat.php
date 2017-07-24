@@ -40,6 +40,12 @@ class Bat extends FlyingAnimal {
 	public $flySpeed = 0.8;
 	public $switchDirectionTicks = 100;
 
+	/**
+	 * Bat constructor.
+	 *
+	 * @param Level       $level
+	 * @param CompoundTag $nbt
+	 */
 	public function __construct(Level $level, CompoundTag $nbt){
 		if(!isset($nbt->isResting)){
 			$nbt->isResting = new ByteTag("isResting", 0);
@@ -49,10 +55,16 @@ class Bat extends FlyingAnimal {
 		$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_RESTING, $this->isResting());
 	}
 
+	/**
+	 * @return int
+	 */
 	public function isResting() : int{
 		return (int) $this->namedtag["isResting"];
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		return "Bat";
 	}
@@ -62,10 +74,18 @@ class Bat extends FlyingAnimal {
 		parent::initEntity();
 	}
 
+	/**
+	 * @param bool $resting
+	 */
 	public function setResting(bool $resting){
 		$this->namedtag->isResting = new ByteTag("isResting", $resting ? 1 : 0);
 	}
 
+	/**
+	 * @param $currentTick
+	 *
+	 * @return bool
+	 */
 	public function onUpdate($currentTick){
 		if($this->age > 20 * 60 * 10){
 			$this->kill();
@@ -74,6 +94,9 @@ class Bat extends FlyingAnimal {
 		return parent::onUpdate($currentTick);
 	}
 
+	/**
+	 * @param Player $player
+	 */
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
 		$pk->eid = $this->getId();

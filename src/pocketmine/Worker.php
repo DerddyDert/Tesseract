@@ -42,6 +42,11 @@ abstract class Worker extends \Worker {
 		}
 	}
 
+	/**
+	 * @param int $options
+	 *
+	 * @return bool
+	 */
 	public function start(int $options = PTHREADS_INHERIT_ALL){
 		ThreadManager::getInstance()->add($this);
 
@@ -56,10 +61,16 @@ abstract class Worker extends \Worker {
 		return false;
 	}
 
+	/**
+	 * @return \ClassLoader
+	 */
 	public function getClassLoader(){
 		return $this->classLoader;
 	}
 
+	/**
+	 * @param \ClassLoader|null $loader
+	 */
 	public function setClassLoader(\ClassLoader $loader = null){
 		if($loader === null){
 			$loader = Server::getInstance()->getLoader();
@@ -88,6 +99,9 @@ abstract class Worker extends \Worker {
 		ThreadManager::getInstance()->remove($this);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getThreadName(){
 		return (new \ReflectionClass($this))->getShortName();
 	}

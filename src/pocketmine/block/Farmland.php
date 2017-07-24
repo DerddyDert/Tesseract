@@ -29,28 +29,50 @@ class Farmland extends Solid {
 
 	protected $id = self::FARMLAND;
 
+	/**
+	 * Farmland constructor.
+	 *
+	 * @param int $meta
+	 */
 	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		return "Farmland";
 	}
 
+	/**
+	 * @return float
+	 */
 	public function getHardness(){
 		return 0.6;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getToolType(){
 		return Tool::TYPE_SHOVEL;
 	}
 
+	/**
+	 * @param Item $item
+	 *
+	 * @return array
+	 */
 	public function getDrops(Item $item) : array{
 		return [
 			[Item::DIRT, 0, 1],
 		];
 	}
 
+	/**
+	 * @return AxisAlignedBB
+	 */
 	protected function recalculateBoundingBox(){
 		return new AxisAlignedBB(
 			$this->x,

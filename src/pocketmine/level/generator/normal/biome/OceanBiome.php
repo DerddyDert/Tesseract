@@ -27,6 +27,9 @@ use pocketmine\level\generator\normal\populator\TallGrass;
 
 class OceanBiome extends WateryBiome {
 
+	/**
+	 * OceanBiome constructor.
+	 */
 	public function __construct(){
 		parent::__construct();
 
@@ -46,6 +49,9 @@ class OceanBiome extends WateryBiome {
 		$this->rainfall = 0.5;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		return "Ocean";
 	}

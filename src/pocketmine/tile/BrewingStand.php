@@ -58,6 +58,12 @@ class BrewingStand extends Spawnable implements InventoryHolder, Container, Name
 	/** @var BrewingInventory */
 	protected $inventory;
 
+	/**
+	 * BrewingStand constructor.
+	 *
+	 * @param Level       $level
+	 * @param CompoundTag $nbt
+	 */
 	public function __construct(Level $level, CompoundTag $nbt){
 		if(!isset($nbt->CookedTime) or !($nbt->CookedTime instanceof ShortTag)){
 			$nbt->CookedTime = new ShortTag("CookedTime", 0);
@@ -114,14 +120,23 @@ class BrewingStand extends Spawnable implements InventoryHolder, Container, Name
 		return -1;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		return $this->hasName() ? $this->namedtag->CustomName->getValue() : "Brewing Stand";
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function hasName(){
 		return isset($this->namedtag->CustomName);
 	}
 
+	/**
+	 * @param void $str
+	 */
 	public function setName($str){
 		if($str === ""){
 			unset($this->namedtag->CustomName);
@@ -190,6 +205,9 @@ class BrewingStand extends Spawnable implements InventoryHolder, Container, Name
 		return true;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function onUpdate(){
 		if($this->closed === true){
 			return false;
@@ -282,6 +300,11 @@ class BrewingStand extends Spawnable implements InventoryHolder, Container, Name
 		return $ret;
 	}
 
+	/**
+	 * @param Item $item
+	 *
+	 * @return bool
+	 */
 	public function checkIngredient(Item $item){
 		if(isset(self::$ingredients[$item->getId()])){
 			if(self::$ingredients[$item->getId()] === $item->getDamage()){
@@ -292,6 +315,9 @@ class BrewingStand extends Spawnable implements InventoryHolder, Container, Name
 		return false;
 	}
 
+	/**
+	 * @return CompoundTag
+	 */
 	public function getSpawnCompound(){
 		$nbt = new CompoundTag("", [
 			new StringTag("id", Tile::BREWING_STAND),

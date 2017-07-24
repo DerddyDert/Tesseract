@@ -34,22 +34,41 @@ class Mycelium extends Solid {
 
 	protected $id = self::MYCELIUM;
 
+	/**
+	 * Mycelium constructor.
+	 *
+	 * @param int $meta
+	 */
 	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		return "Mycelium";
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getToolType(){
 		return Tool::TYPE_SHOVEL;
 	}
 
+	/**
+	 * @return float
+	 */
 	public function getHardness(){
 		return 0.6;
 	}
 
+	/**
+	 * @param Item $item
+	 *
+	 * @return array
+	 */
 	public function getDrops(Item $item) : array{
 		if($item->getEnchantmentLevel(Enchantment::TYPE_MINING_SILK_TOUCH) > 0){
 			return [
@@ -62,6 +81,9 @@ class Mycelium extends Solid {
 		}
 	}
 
+	/**
+	 * @param int $type
+	 */
 	public function onUpdate($type){
 		if($type === Level::BLOCK_UPDATE_RANDOM){
 			//TODO: light levels

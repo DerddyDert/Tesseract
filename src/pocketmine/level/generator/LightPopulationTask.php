@@ -33,6 +33,12 @@ class LightPopulationTask extends AsyncTask {
 	public $levelId;
 	public $chunk;
 
+	/**
+	 * LightPopulationTask constructor.
+	 *
+	 * @param Level $level
+	 * @param Chunk $chunk
+	 */
 	public function __construct(Level $level, Chunk $chunk){
 		$this->levelId = $level->getId();
 		$this->chunk = $chunk->fastSerialize();
@@ -53,6 +59,9 @@ class LightPopulationTask extends AsyncTask {
 		$this->chunk = $chunk->fastSerialize();
 	}
 
+	/**
+	 * @param Server $server
+	 */
 	public function onCompletion(Server $server){
 		$level = $server->getLevel($this->levelId);
 		if($level !== null){

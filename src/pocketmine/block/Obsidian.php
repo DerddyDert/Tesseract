@@ -32,6 +32,11 @@ class Obsidian extends Solid {
 	/** @var Vector3 */
 	private $temporalVector = null;
 
+	/**
+	 * Obsidian constructor.
+	 *
+	 * @param int $meta
+	 */
 	public function __construct($meta = 0){
 		$this->meta = $meta;
 		if($this->temporalVector === null){
@@ -39,18 +44,32 @@ class Obsidian extends Solid {
 		}
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		return "Obsidian";
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getToolType(){
 		return Tool::TYPE_PICKAXE;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getHardness(){
 		return 50;
 	}
 
+	/**
+	 * @param Item $item
+	 *
+	 * @return array
+	 */
 	public function getDrops(Item $item) : array{
 		if($item->isPickaxe() >= 5){
 			return [
@@ -61,6 +80,9 @@ class Obsidian extends Solid {
 		}
 	}
 
+	/**
+	 * @param Item $item
+	 */
 	public function onBreak(Item $item){
 		parent::onBreak($item);
 

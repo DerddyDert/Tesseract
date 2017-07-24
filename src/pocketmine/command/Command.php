@@ -189,6 +189,11 @@ abstract class Command {
 		return $this->label;
 	}
 
+	/**
+	 * @param string $name
+	 *
+	 * @return bool
+	 */
 	public function setLabel(string $name) : bool{
 		$this->nextLabel = $name;
 		if(!$this->isRegistered()){

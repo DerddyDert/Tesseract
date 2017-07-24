@@ -31,18 +31,41 @@ class RedstoneTorch extends Torch {
 	protected $id = self::REDSTONE_TORCH;
 	protected $ignore = "";
 
+	/**
+	 * RedstoneTorch constructor.
+	 *
+	 * @param int $meta
+	 */
 	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getLightLevel(){
 		return 7;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName() : string{
 		return "Redstone Torch";
 	}
 
+	/**
+	 * @param Item        $item
+	 * @param Block       $block
+	 * @param Block       $target
+	 * @param             $face
+	 * @param             $fx
+	 * @param             $fy
+	 * @param             $fz
+	 * @param Player|null $player
+	 *
+	 * @return bool
+	 */
 	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
 		$below = $this->getSide(0);
 
@@ -73,6 +96,11 @@ class RedstoneTorch extends Torch {
 		return false;
 	}
 
+	/**
+	 * @param Item $item
+	 *
+	 * @return array
+	 */
 	public function getDrops(Item $item) : array{
 		return [
 			[Item::REDSTONE_TORCH, 0, 1],
