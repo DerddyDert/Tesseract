@@ -44,9 +44,8 @@ class Lightning extends Animal {
 	}
 
 	public function initEntity(){
-		parent::initEntity();
 		$this->setMaxHealth(2);
-		$this->setHealth(2);
+		parent::initEntity();
 	}
 
 	/**
@@ -116,10 +115,6 @@ class Lightning extends Animal {
 						$ev->useArmors();
 					}
 					$entity->setOnFire(mt_rand(3, 8));
-				}
-
-				if($entity instanceof Creeper){
-					$entity->setPowered(true, $this);
 				}
 			}
 		}

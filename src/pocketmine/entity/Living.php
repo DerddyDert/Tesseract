@@ -30,6 +30,7 @@ use pocketmine\event\entity\EntityRegainHealthEvent;
 use pocketmine\event\Timings;
 use pocketmine\item\Item as ItemItem;
 use pocketmine\math\Vector3;
+use pocketmine\nbt\tag\FloatTag;
 use pocketmine\nbt\tag\ShortTag;
 use pocketmine\network\protocol\EntityEventPacket;
 use pocketmine\Player;
@@ -83,9 +84,7 @@ abstract class Living extends Entity implements Damageable {
 			return;
 		}
 		parent::kill();
-	}
 
-	protected function callDeathEvent(){
 		$this->server->getPluginManager()->callEvent($ev = new EntityDeathEvent($this, $this->getDrops()));
 		foreach($ev->getDrops() as $item){
 			$this->getLevel()->dropItem($this, $item);
@@ -346,17 +345,17 @@ abstract class Living extends Entity implements Damageable {
 		parent::initEntity();
 
 		if(isset($this->namedtag->HealF)){
-			$this->namedtag->Health = new ShortTag("Health", (int) $this->namedtag["HealF"]);
+			$this->namedtag->Health = new FloatTag("Health", (float) $this->namedtag["HealF"]);
 			unset($this->namedtag->HealF);
+		}elseif(isset($this->namedtag->Health)){
+			if(!($this->namedtag->Health instanceof FloatTag)){
+				$this->namedtag->Health = new FloatTag("Health", (float) $this->namedtag->Health->getValue());
+			}
+		}else{
+			$this->namedtag->Health = new FloatTag("Health", (float) $this->getMaxHealth());
 		}
 
-		if(!isset($this->namedtag->Health) or !($this->namedtag->Health instanceof ShortTag)){
-			$this->namedtag->Health = new ShortTag("Health", $this->getMaxHealth());
-		}
-
-		if($this->namedtag["Health"] <= 0)
-			$this->setHealth(20);
-		else $this->setHealth($this->namedtag["Health"]);
+		$this->setHealth($this->namedtag["Health"]);
 	}
 
 	/**

@@ -280,6 +280,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$this->rawUUID = null;
 
 		$this->creationTime = microtime(true);
+
+		Entity::setHealth(20);
 	}
 
 	/**
@@ -1405,6 +1407,14 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 		if($this->getHealth() <= 0){
 			$this->sendRespawnPacket($this->getSpawn());
+		}
+	}
+
+	public function setHealth($amount){
+		parent::setHealth($amount);
+		if($this->spawned === true){
+			$this->foodTick = 0;
+			$this->getAttributeMap()->getAttribute(Attribute::HEALTH)->setMaxValue($this->getMaxHealth())->setValue($amount, true);
 		}
 	}
 
@@ -3777,12 +3787,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			return;
 		}
 
-		parent::kill();
-
-		$this->sendRespawnPacket($this->getSpawn());
-	}
-
-	protected function callDeathEvent(){
 		$message = "death.attack.generic";
 
 		$params = [
@@ -3895,6 +3899,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 		}
 
+		Entity::kill();
+
 		$ev = new PlayerDeathEvent($this, $this->getDrops(), new TranslationContainer($message, $params));
 		$ev->setKeepInventory($this->server->keepInventory);
 		$ev->setKeepExperience($this->server->keepExperience);
@@ -3923,6 +3929,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		if($ev->getDeathMessage() != ""){
 			$this->server->broadcast($ev->getDeathMessage(), Server::BROADCAST_CHANNEL_USERS);
 		}
+
+		$this->sendRespawnPacket($this->getSpawn());
 
 	}
 
